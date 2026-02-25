@@ -22,7 +22,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;co
 .card{background:var(--glass);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid var(--glass-b);border-radius:var(--radius);padding:14px;overflow:hidden}
 .card-title{font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:var(--dim);margin-bottom:10px}
 
-/* TOP BAR */
+/* TOP */
 #top{grid-column:1/-1;display:flex;align-items:center;gap:10px}
 #weather-now{display:flex;align-items:center;gap:10px;min-width:190px}
 #wi-big{font-size:48px;line-height:1}
@@ -37,57 +37,59 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;co
 #feels{font-size:11px;color:var(--dim);margin-top:6px;text-align:right}
 #uv-inline{font-size:11px;color:var(--dim);margin-top:2px;text-align:right}
 
-/* LEFT COLUMN */
+/* LEFT */
 #left{display:flex;flex-direction:column;gap:10px;overflow:hidden;min-height:0}
-#hourly-scroll{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
-#hourly-scroll::-webkit-scrollbar{display:none}
-.hr{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:50px;background:var(--accent);border-radius:12px;padding:7px 5px;font-size:11px}
+
+/* Hourly — grid fills full width */
+#hourly-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:5px}
+.hr{display:flex;flex-direction:column;align-items:center;gap:3px;background:var(--accent);border-radius:12px;padding:7px 4px;font-size:11px;min-width:0}
 .hr-t{color:var(--dim);font-size:10px}
-.hr-i{font-size:18px}
+.hr-i{font-size:17px}
 .hr-tmp{font-weight:500}
 .hr-rain{font-size:9px;color:#7dd3fc}
-.fc-r{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--glass-b);font-size:12px}
+
+/* Forecast */
+.fc-r{display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--glass-b);font-size:12px}
 .fc-r:last-child{border:none}
-.fc-day{width:70px;font-size:12px}
-.fc-ico{font-size:17px;width:26px;text-align:center}
-.fc-bw{flex:1;display:flex;align-items:center;gap:5px;margin:0 6px}
+.fc-day{width:60px;font-size:11px}
+.fc-ico{font-size:16px;width:24px;text-align:center}
+.fc-bw{flex:1;display:flex;align-items:center;gap:4px;margin:0 5px}
 .fc-lo{color:var(--dim);font-size:11px;width:26px;text-align:right}
 .fc-bg{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,0.12);position:relative}
 .fc-fill{height:4px;border-radius:2px;background:linear-gradient(90deg,#7dd3fc,#fb923c);position:absolute}
 .fc-hi{width:26px;font-size:11px}
 
-/* SPOTIFY */
-#sp-login-btn{width:100%;background:#1db954;border:none;color:white;border-radius:10px;padding:9px;font-size:13px;cursor:pointer;font-weight:600;letter-spacing:.3px}
-#sp-player{display:none}
-#sp-inner{display:flex;align-items:center;gap:10px}
-#sp-art{width:54px;height:54px;border-radius:10px;background:var(--accent);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:22px;overflow:hidden}
-#sp-art img{width:100%;height:100%;object-fit:cover;border-radius:10px}
-#sp-info{flex:1;overflow:hidden}
-#sp-track{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#sp-artist{font-size:11px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
-#sp-prog{height:3px;background:rgba(255,255,255,0.15);border-radius:2px;margin-top:8px}
-#sp-pfill{height:3px;background:#1db954;border-radius:2px;width:0%;transition:width 1s linear}
-#sp-ctrl{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:8px}
-.sp-b{background:none;border:none;color:var(--text);cursor:pointer;font-size:19px;padding:3px;opacity:.75;transition:opacity .2s;line-height:1}
-.sp-b:hover{opacity:1}
-#sp-pp{font-size:26px}
-#sp-idle{font-size:11px;color:var(--dim);margin-top:4px;text-align:center}
+/* Spotify — Web Playback SDK style */
+.sw{display:flex;align-items:center;gap:10px}
+.sc{width:54px;height:54px;border-radius:10px;background:var(--accent);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:22px;overflow:hidden}
+.sc img{width:100%;height:100%;object-fit:cover;border-radius:10px}
+.sph{font-size:22px}
+.sif{flex:1;overflow:hidden}
+.str{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sar{font-size:11px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.scr{display:flex;align-items:center;gap:14px;margin-top:7px}
+.sb{background:none;border:none;color:var(--text);cursor:pointer;font-size:18px;padding:2px;opacity:.75;transition:opacity .2s;line-height:1}
+.sb:hover{opacity:1}
+.pp{font-size:24px}
+.spr{height:3px;background:rgba(255,255,255,0.15);border-radius:2px;margin-top:7px}
+.spf{height:3px;background:#1db954;border-radius:2px;transition:width .5s linear}
+.sli{display:inline-block;margin-top:8px;background:#1db954;border:none;color:white;border-radius:8px;padding:6px 14px;font-size:12px;cursor:pointer;font-weight:600}
 
-/* RIGHT COLUMN */
+/* RIGHT */
 #right{display:flex;flex-direction:column;gap:10px;overflow:hidden;min-height:0}
 #cal-card{flex:2;display:flex;flex-direction:column;min-height:0}
 #cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 #cal-month{font-size:13px;font-weight:500}
-.cal-nav{background:none;border:none;color:var(--text);font-size:16px;cursor:pointer;padding:2px 6px;opacity:0.7;transition:opacity .2s}
+.cal-nav{background:none;border:none;color:var(--text);font-size:16px;cursor:pointer;padding:2px 6px;opacity:.7;transition:opacity .2s}
 .cal-nav:hover{opacity:1}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;flex:1}
 .cal-dow{font-size:9px;color:var(--dim);text-align:center;padding:2px 0}
 .cal-day{display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:8px;font-size:10px;gap:1px;padding:2px 0}
 .cal-day.today{background:rgba(255,255,255,0.22);font-weight:700}
-.cal-day.other{color:var(--dim);opacity:0.35}
+.cal-day.other{color:var(--dim);opacity:.35}
 .cal-day.bh{color:#fbbf24}
-.cal-day .cn{line-height:1}
-.cal-day .cd{font-size:8px;line-height:1}
+.cn{line-height:1}
+.cd{font-size:8px;line-height:1}
 #moon-card{flex:0 0 auto}
 #moon-inner{display:flex;align-items:center;gap:12px}
 #moon-vis{font-size:46px;line-height:1}
@@ -115,7 +117,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;co
 <div id="bg-overlay"></div>
 <div id="app">
 
-  <!-- TOP BAR -->
+  <!-- TOP -->
   <div id="top">
     <div id="weather-now" class="card">
       <div id="wi-big">⛅</div>
@@ -137,39 +139,23 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;co
     </div>
   </div>
 
-  <!-- LEFT COLUMN -->
+  <!-- LEFT -->
   <div id="left">
     <div class="card" id="hourly-card">
       <div class="card-title">Hourly</div>
-      <div id="hourly-scroll"><span style="color:var(--dim);font-size:12px">Loading…</span></div>
+      <div id="hourly-grid"><span style="color:var(--dim);font-size:12px">Loading…</span></div>
     </div>
     <div class="card" id="forecast-card" style="flex:1">
-      <div class="card-title">5-Day Forecast</div>
+      <div class="card-title">7-Day Forecast</div>
       <div id="fc-list"><span style="color:var(--dim);font-size:12px">Loading…</span></div>
     </div>
     <div id="sp-card" class="card">
       <div class="card-title">Now Playing</div>
-      <button id="sp-login-btn">Connect Spotify</button>
-      <div id="sp-player">
-        <div id="sp-inner">
-          <div id="sp-art">♪</div>
-          <div id="sp-info">
-            <div id="sp-track">Nothing playing</div>
-            <div id="sp-artist">—</div>
-          </div>
-        </div>
-        <div id="sp-prog"><div id="sp-pfill"></div></div>
-        <div id="sp-ctrl">
-          <button class="sp-b" id="sp-prev">⏮</button>
-          <button class="sp-b" id="sp-pp">▶</button>
-          <button class="sp-b" id="sp-next">⏭</button>
-        </div>
-        <div id="sp-idle"></div>
-      </div>
+      <div id="spB"></div>
     </div>
   </div>
 
-  <!-- RIGHT COLUMN -->
+  <!-- RIGHT -->
   <div id="right">
     <div id="cal-card" class="card">
       <div id="cal-head">
@@ -199,25 +185,23 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;co
     </div>
   </div>
 
-</div><!-- end #app -->
+</div>
 
 <script>
-// ── CONFIG ──────────────────────────────────────────────
-const LAT = 51.4779, LON = -0.0015;
-const TRAIN_TOKEN = 'a6d2c92a-e73b-4f27-8edc-53a8bca090d9';
-const SP_CLIENT_ID = 'a61a2fffda4f42bb8805650ff52bf415';
-const REDIRECT_URI = 'https://kuraishii.github.io/home-dashboard/';
-const SP_SCOPES = 'user-read-playback-state user-modify-playback-state user-read-currently-playing';
+// ── CONFIG ───────────────────────────────────────────────
+const C = {
+  lat: 51.4779, lon: -0.0015,
+  trainToken: 'a6d2c92a-e73b-4f27-8edc-53a8bca090d9',
+  spId: 'a61a2fffda4f42bb8805650ff52bf415',
+  spRedirect: 'https://kuraishii.github.io/home-dashboard/',
+  spScopes: 'user-read-playback-state user-modify-playback-state streaming user-read-currently-playing'
+};
 
 const DAYS   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const SDAYS  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-
-const BH = new Set([
-  '2025-01-01','2025-04-18','2025-04-21','2025-05-05','2025-05-26','2025-08-25','2025-12-25','2025-12-26',
-  '2026-01-01','2026-04-03','2026-04-06','2026-05-04','2026-05-25','2026-08-31','2026-12-25','2026-12-28'
-]);
-function isBH(d){ const k=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; return BH.has(k); }
+const BH = new Set(['2025-01-01','2025-04-18','2025-04-21','2025-05-05','2025-05-26','2025-08-25','2025-12-25','2025-12-26','2026-01-01','2026-04-03','2026-04-06','2026-05-04','2026-05-25','2026-08-31','2026-12-25','2026-12-28']);
+function isBH(d){return BH.has(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`)}
 
 // ── CLOCK ────────────────────────────────────────────────
 function tick(){
@@ -242,58 +226,42 @@ const BG={
   thunder:'linear-gradient(135deg,#12001f 0%,#1a0030 55%,#0d1b2a 100%)',
 };
 function pickBg(id,now,sr,ss){
-  const h=now.getHours(), srH=sr?new Date(sr*1000).getHours():6, ssH=ss?new Date(ss*1000).getHours():20;
-  const isDay=h>=srH&&h<ssH, isDawn=h>=srH-1&&h<srH+1, isDusk=h>=ssH-1&&h<ssH+1;
-  if(id>=200&&id<300) return BG.thunder;
-  if(id>=300&&id<600) return isDay?BG.rain_day:BG.rain_night;
-  if(id>=600&&id<700) return BG.snow;
-  if(id>=801) return isDay?BG.cloud_day:BG.cloud_night;
-  if(isDawn) return BG.clear_dawn;
-  if(isDusk) return BG.clear_dusk;
+  const h=now.getHours(),srH=sr?new Date(sr*1000).getHours():6,ssH=ss?new Date(ss*1000).getHours():20;
+  const isDay=h>=srH&&h<ssH,isDawn=h>=srH-1&&h<srH+1,isDusk=h>=ssH-1&&h<ssH+1;
+  if(id>=200&&id<300)return BG.thunder;
+  if(id>=300&&id<600)return isDay?BG.rain_day:BG.rain_night;
+  if(id>=600&&id<700)return BG.snow;
+  if(id>=801)return isDay?BG.cloud_day:BG.cloud_night;
+  if(isDawn)return BG.clear_dawn;
+  if(isDusk)return BG.clear_dusk;
   return isDay?BG.clear_day:BG.clear_night;
 }
-function updateBg(){ document.getElementById('bg').style.background=pickBg(_wid,new Date(),_sr,_ss); }
+function updateBg(){document.getElementById('bg').style.background=pickBg(_wid,new Date(),_sr,_ss);}
 setInterval(updateBg,60000); updateBg();
 
 // ── WEATHER HELPERS ──────────────────────────────────────
-function wmoIcon(code,isDay=true){
-  if(code===0) return isDay?'☀️':'🌙';
-  if(code<=2) return isDay?'🌤️':'🌙';
-  if(code===3) return '☁️';
-  if(code<=49) return '🌫️';
-  if(code<=59) return '🌦️';
-  if(code<=69) return '🌧️';
-  if(code<=79) return '❄️';
-  if(code<=84) return '🌧️';
-  if(code<=94) return '🌨️';
-  return '⛈️';
+function wmoIcon(c,d=true){
+  if(c===0)return d?'☀️':'🌙';if(c<=2)return d?'🌤️':'🌙';if(c===3)return '☁️';
+  if(c<=49)return '🌫️';if(c<=59)return '🌦️';if(c<=69)return '🌧️';
+  if(c<=79)return '❄️';if(c<=84)return '🌧️';if(c<=94)return '🌨️';return '⛈️';
 }
-function wmoDesc(code){
-  const m={0:'Clear sky',1:'Mainly clear',2:'Partly cloudy',3:'Overcast',45:'Foggy',48:'Icy fog',51:'Light drizzle',53:'Drizzle',55:'Heavy drizzle',61:'Light rain',63:'Rain',65:'Heavy rain',71:'Light snow',73:'Snow',75:'Heavy snow',77:'Snow grains',80:'Showers',81:'Rain showers',82:'Violent showers',85:'Snow showers',86:'Heavy snow showers',95:'Thunderstorm',96:'Thunderstorm w/ hail',99:'Severe thunderstorm'};
-  return m[code]||'Unknown';
-}
-function wmoToId(code){
-  if(code===0) return 800; if(code<=2) return 801; if(code===3) return 804;
-  if(code<=49) return 741; if(code<=59) return 300; if(code<=69) return 501;
-  if(code<=79) return 601; if(code<=84) return 502; if(code<=94) return 621;
-  return 211;
-}
+function wmoDesc(c){const m={0:'Clear sky',1:'Mainly clear',2:'Partly cloudy',3:'Overcast',45:'Foggy',48:'Icy fog',51:'Light drizzle',53:'Drizzle',55:'Heavy drizzle',61:'Light rain',63:'Rain',65:'Heavy rain',71:'Light snow',73:'Snow',75:'Heavy snow',77:'Snow grains',80:'Showers',81:'Rain showers',82:'Violent showers',85:'Snow showers',86:'Heavy snow showers',95:'Thunderstorm',96:'Thunderstorm w/ hail',99:'Severe thunderstorm'};return m[c]||'Unknown';}
+function wmoToId(c){if(c===0)return 800;if(c<=2)return 801;if(c===3)return 804;if(c<=49)return 741;if(c<=59)return 300;if(c<=69)return 501;if(c<=79)return 601;if(c<=84)return 502;if(c<=94)return 621;return 211;}
 
 // ── OPEN-METEO ───────────────────────────────────────────
 async function fetchWeather(){
   try{
-    const url=`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}`+
+    const url=`https://api.open-meteo.com/v1/forecast?latitude=${C.lat}&longitude=${C.lon}`+
       `&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,is_day`+
       `&hourly=temperature_2m,weather_code,precipitation_probability`+
       `&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max`+
-      `&timezone=Europe%2FLondon&forecast_days=6`;
+      `&timezone=Europe%2FLondon&forecast_days=8`;
     const d=await fetch(url).then(r=>r.json());
-    const c=d.current, daily=d.daily, hourly=d.hourly;
+    const c=d.current,daily=d.daily,hourly=d.hourly;
     const isDay=c.is_day===1;
     _wid=wmoToId(c.weather_code);
-    const srStr=daily.sunrise[0], ssStr=daily.sunset[0];
-    _sr=new Date(srStr).getTime()/1000;
-    _ss=new Date(ssStr).getTime()/1000;
+    _sr=new Date(daily.sunrise[0]).getTime()/1000;
+    _ss=new Date(daily.sunset[0]).getTime()/1000;
     updateBg();
     document.getElementById('wi-big').textContent=wmoIcon(c.weather_code,isDay);
     document.getElementById('temp-now').textContent=`${Math.round(c.temperature_2m)}°`;
@@ -301,23 +269,24 @@ async function fetchWeather(){
     document.getElementById('w-meta').textContent=`Humidity ${c.relative_humidity_2m}% · Wind ${Math.round(c.wind_speed_10m)} km/h`;
     document.getElementById('feels').textContent=`Feels like ${Math.round(c.apparent_temperature)}°`;
     const uv=daily.uv_index_max[0];
-    const uvLbl=uv<=2?'Low':uv<=5?'Moderate':uv<=7?'High':uv<=10?'Very High':'Extreme';
-    document.getElementById('uv-inline').textContent=`UV ${uv} — ${uvLbl}`;
-    document.getElementById('sr').textContent=new Date(srStr).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-    document.getElementById('ss').textContent=new Date(ssStr).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-    // Hourly
-    const nowIdx=Math.max(0,hourly.time.findIndex(t=>new Date(t)>new Date())-1);
-    document.getElementById('hourly-scroll').innerHTML=hourly.time.slice(nowIdx,nowIdx+13).map((t,i)=>{
-      const idx=nowIdx+i, hDate=new Date(t), hIsDay=hDate.getHours()>=6&&hDate.getHours()<21;
+    document.getElementById('uv-inline').textContent=`UV ${uv} — ${uv<=2?'Low':uv<=5?'Moderate':uv<=7?'High':uv<=10?'Very High':'Extreme'}`;
+    document.getElementById('sr').textContent=new Date(daily.sunrise[0]).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+    document.getElementById('ss').textContent=new Date(daily.sunset[0]).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+
+    // Hourly — 8 tiles filling full width
+    const ni=Math.max(0,hourly.time.findIndex(t=>new Date(t)>new Date())-1);
+    document.getElementById('hourly-grid').innerHTML=hourly.time.slice(ni,ni+8).map((t,i)=>{
+      const idx=ni+i,hd=new Date(t),hDay=hd.getHours()>=6&&hd.getHours()<21;
       const rain=hourly.precipitation_probability[idx]||0;
-      return `<div class="hr"><div class="hr-t">${String(hDate.getHours()).padStart(2,'0')}:00</div><div class="hr-i">${wmoIcon(hourly.weather_code[idx],hIsDay)}</div><div class="hr-tmp">${Math.round(hourly.temperature_2m[idx])}°</div><div class="hr-rain">${rain>0?rain+'%💧':'—'}</div></div>`;
+      return `<div class="hr"><div class="hr-t">${String(hd.getHours()).padStart(2,'0')}:00</div><div class="hr-i">${wmoIcon(hourly.weather_code[idx],hDay)}</div><div class="hr-tmp">${Math.round(hourly.temperature_2m[idx])}°</div><div class="hr-rain">${rain>0?rain+'%💧':'—'}</div></div>`;
     }).join('');
-    // 5-day
-    const loT=Math.min(...daily.temperature_2m_min), hiT=Math.max(...daily.temperature_2m_max), rng=hiT-loT||1;
-    document.getElementById('fc-list').innerHTML=daily.weather_code.slice(0,5).map((code,i)=>{
-      const date=new Date(daily.sunrise[i]), dayName=i===0?'Today':SDAYS[date.getDay()];
-      const lo=Math.round(daily.temperature_2m_min[i]), hi=Math.round(daily.temperature_2m_max[i]);
-      const left=((lo-loT)/rng*75).toFixed(1), w=(((hi-lo)/rng*75)||4).toFixed(1);
+
+    // 7-day forecast
+    const loT=Math.min(...daily.temperature_2m_min.slice(0,7)),hiT=Math.max(...daily.temperature_2m_max.slice(0,7)),rng=hiT-loT||1;
+    document.getElementById('fc-list').innerHTML=daily.weather_code.slice(0,7).map((code,i)=>{
+      const date=new Date(daily.sunrise[i]),dayName=i===0?'Today':SDAYS[date.getDay()];
+      const lo=Math.round(daily.temperature_2m_min[i]),hi=Math.round(daily.temperature_2m_max[i]);
+      const left=((lo-loT)/rng*75).toFixed(1),w=(((hi-lo)/rng*75)||4).toFixed(1);
       return `<div class="fc-r"><div class="fc-day">${dayName}</div><div class="fc-ico">${wmoIcon(code,true)}</div><div class="fc-bw"><div class="fc-lo">${lo}°</div><div class="fc-bg"><div class="fc-fill" style="left:${left}%;width:${w}%"></div></div><div class="fc-hi">${hi}°</div></div></div>`;
     }).join('');
   }catch(e){console.error('Weather',e)}
@@ -326,23 +295,14 @@ fetchWeather(); setInterval(fetchWeather,10*60*1000);
 
 // ── MOON ─────────────────────────────────────────────────
 function moonPhase(date=new Date()){
-  const LUNAR=29.53058867;
-  const known=new Date('2000-01-06T18:14:00Z');
-  const age=((((date-known)/(864e5))%LUNAR)+LUNAR)%LUNAR;
-  const pct=Math.round((Math.cos((age/LUNAR)*2*Math.PI)*-0.5+0.5)*100);
-  const phases=[
-    {n:'New Moon',e:'🌑',max:1.85},{n:'Waxing Crescent',e:'🌒',max:7.38},
-    {n:'First Quarter',e:'🌓',max:11.08},{n:'Waxing Gibbous',e:'🌔',max:14.77},
-    {n:'Full Moon',e:'🌕',max:16.61},{n:'Waning Gibbous',e:'🌖',max:22.15},
-    {n:'Last Quarter',e:'🌗',max:25.84},{n:'Waning Crescent',e:'🌘',max:29.53},
-  ];
+  const L=29.53058867,known=new Date('2000-01-06T18:14:00Z');
+  const age=((((date-known)/(864e5))%L)+L)%L;
+  const pct=Math.round((Math.cos((age/L)*2*Math.PI)*-0.5+0.5)*100);
+  const phases=[{n:'New Moon',e:'🌑',max:1.85},{n:'Waxing Crescent',e:'🌒',max:7.38},{n:'First Quarter',e:'🌓',max:11.08},{n:'Waxing Gibbous',e:'🌔',max:14.77},{n:'Full Moon',e:'🌕',max:16.61},{n:'Waning Gibbous',e:'🌖',max:22.15},{n:'Last Quarter',e:'🌗',max:25.84},{n:'Waning Crescent',e:'🌘',max:29.53}];
   const ph=phases.find(p=>age<=p.max)||phases[0];
-  const nextKeys=[0,7.38,14.77,22.15];
-  const nextNames=['New Moon','First Quarter','Full Moon','Last Quarter'];
-  const nextAge=nextKeys.find(a=>a>age)??(LUNAR+nextKeys[0]);
-  const daysLeft=Math.round(nextAge>age?nextAge-age:LUNAR-age+nextKeys[0]);
-  const nextName=nextNames[nextKeys.indexOf(nextAge)]??'New Moon';
-  return {name:ph.n,emoji:ph.e,pct,age:Math.round(age),daysLeft,nextName};
+  const nk=[0,7.38,14.77,22.15],nn=['New Moon','First Quarter','Full Moon','Last Quarter'];
+  const na=nk.find(a=>a>age)??(L+nk[0]);
+  return{name:ph.n,emoji:ph.e,pct,age:Math.round(age),daysLeft:Math.round(na>age?na-age:L-age+nk[0]),nextName:nn[nk.indexOf(na)]??'New Moon'};
 }
 function renderMoon(){
   const m=moonPhase();
@@ -354,56 +314,60 @@ function renderMoon(){
 renderMoon(); setInterval(renderMoon,3600000);
 
 // ── CALENDAR ─────────────────────────────────────────────
-let calYear=new Date().getFullYear(), calMonth=new Date().getMonth();
+let calY=new Date().getFullYear(), calM=new Date().getMonth();
 function moonEventsInMonth(y,m){
-  const LUNAR=29.53058867, known=new Date('2000-01-06T18:14:00Z');
-  const days=new Date(y,m+1,0).getDate(), events={};
+  const L=29.53058867,known=new Date('2000-01-06T18:14:00Z');
+  const days=new Date(y,m+1,0).getDate(),ev={};
   for(let d=1;d<=days;d++){
-    const cur=new Date(y,m,d,12,0,0), prev=new Date(y,m,d-1,12,0,0);
-    const age=((((cur-known)/(864e5))%LUNAR)+LUNAR)%LUNAR;
-    const pAge=((((prev-known)/(864e5))%LUNAR)+LUNAR)%LUNAR;
-    if((pAge>27&&age<2)||(pAge>age&&age<1)) events[d]='🌑';
-    if(pAge<14.77&&age>=14.77&&age<16) events[d]='🌕';
+    const cur=new Date(y,m,d,12),prev=new Date(y,m,d-1,12);
+    const age=((((cur-known)/(864e5))%L)+L)%L;
+    const pAge=((((prev-known)/(864e5))%L)+L)%L;
+    if((pAge>27&&age<2)||(pAge>age&&age<1))ev[d]='🌑';
+    if(pAge<14.77&&age>=14.77&&age<16)ev[d]='🌕';
   }
-  return events;
+  return ev;
 }
 function renderCal(){
   const today=new Date();
-  document.getElementById('cal-month').textContent=`${MONTHS[calMonth]} ${calYear}`;
-  const moonEv=moonEventsInMonth(calYear,calMonth);
-  const firstDow=(new Date(calYear,calMonth,1).getDay()+6)%7;
-  const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
-  const prevDays=new Date(calYear,calMonth,0).getDate();
-  let html=['M','T','W','T','F','S','S'].map(d=>`<div class="cal-dow">${d}</div>`).join('');
-  for(let i=firstDow-1;i>=0;i--) html+=`<div class="cal-day other"><div class="cn">${prevDays-i}</div></div>`;
-  for(let d=1;d<=daysInMonth;d++){
-    const date=new Date(calYear,calMonth,d);
-    const isToday=d===today.getDate()&&calMonth===today.getMonth()&&calYear===today.getFullYear();
+  document.getElementById('cal-month').textContent=`${MONTHS[calM]} ${calY}`;
+  const ev=moonEventsInMonth(calY,calM);
+  const firstDow=(new Date(calY,calM,1).getDay()+6)%7;
+  const dim=new Date(calY,calM+1,0).getDate();
+  const prev=new Date(calY,calM,0).getDate();
+  let h=['M','T','W','T','F','S','S'].map(d=>`<div class="cal-dow">${d}</div>`).join('');
+  for(let i=firstDow-1;i>=0;i--)h+=`<div class="cal-day other"><div class="cn">${prev-i}</div></div>`;
+  for(let d=1;d<=dim;d++){
+    const date=new Date(calY,calM,d);
+    const isToday=d===today.getDate()&&calM===today.getMonth()&&calY===today.getFullYear();
     const cls=['cal-day',isToday?'today':'',isBH(date)?'bh':''].filter(Boolean).join(' ');
-    html+=`<div class="${cls}"><div class="cn">${d}</div>${moonEv[d]?`<div class="cd">${moonEv[d]}</div>`:''}</div>`;
+    h+=`<div class="${cls}"><div class="cn">${d}</div>${ev[d]?`<div class="cd">${ev[d]}</div>`:''}</div>`;
   }
-  document.getElementById('cal-grid').innerHTML=html;
+  document.getElementById('cal-grid').innerHTML=h;
 }
 renderCal();
-document.getElementById('cal-prev').onclick=()=>{calMonth--;if(calMonth<0){calMonth=11;calYear--;}renderCal()};
-document.getElementById('cal-next').onclick=()=>{calMonth++;if(calMonth>11){calMonth=0;calYear++;}renderCal()};
+document.getElementById('cal-prev').addEventListener('click',()=>{calM--;if(calM<0){calM=11;calY--;}renderCal()});
+document.getElementById('cal-next').addEventListener('click',()=>{calM++;if(calM>11){calM=0;calY++;}renderCal()});
 
-// ── TRAINS ───────────────────────────────────────────────
-const SOAP_EP='https://lite.realtime.nationalrail.co.uk/OpenLDBWS/ldb11.asmx';
-const PROXY='https://corsproxy.io/?url=';
+// ── TRAINS (OpenLDBWS via corsproxy.io) ──────────────────
 async function fetchTrains(){
-  const soap=`<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:typ="http://thalesgroup.com/RTTI/2013-11-28/Token/types" xmlns:ldb="http://thalesgroup.com/RTTI/2017-02-02/ldb/"><soap:Header><typ:AccessToken><typ:TokenValue>${TRAIN_TOKEN}</typ:TokenValue></typ:AccessToken></soap:Header><soap:Body><ldb:GetDepBoardWithDetailsRequest><ldb:numRows>8</ldb:numRows><ldb:crs>DEP</ldb:crs></ldb:GetDepBoardWithDetailsRequest></soap:Body></soap:Envelope>`;
+  const soap=`<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:typ="http://thalesgroup.com/RTTI/2013-11-28/Token/types" xmlns:ldb="http://thalesgroup.com/RTTI/2017-02-02/ldb/"><soap:Header><typ:AccessToken><typ:TokenValue>${C.trainToken}</typ:TokenValue></typ:AccessToken></soap:Header><soap:Body><ldb:GetDepBoardWithDetailsRequest><ldb:numRows>8</ldb:numRows><ldb:crs>DEP</ldb:crs></ldb:GetDepBoardWithDetailsRequest></soap:Body></soap:Envelope>`;
   try{
-    const res=await fetch(PROXY+encodeURIComponent(SOAP_EP),{method:'POST',headers:{'Content-Type':'text/xml;charset=UTF-8','SOAPAction':'http://thalesgroup.com/RTTI/2017-02-02/ldb/GetDepBoardWithDetails'},body:soap});
-    const doc=new DOMParser().parseFromString(await res.text(),'text/xml');
+    const res=await fetch('https://corsproxy.io/?url=https://lite.realtime.nationalrail.co.uk/OpenLDBWS/ldb11.asmx',{
+      method:'POST',
+      headers:{'Content-Type':'text/xml;charset=UTF-8','SOAPAction':'http://thalesgroup.com/RTTI/2017-02-02/ldb/GetDepBoardWithDetails'},
+      body:soap
+    });
+    if(!res.ok)throw new Error(`HTTP ${res.status}`);
+    const txt=await res.text();
+    const doc=new DOMParser().parseFromString(txt,'text/xml');
     const svcs=doc.querySelectorAll('trainServices service');
-    if(!svcs.length){document.getElementById('train-list').innerHTML='<span style="color:var(--dim);font-size:11px">No departures</span>';return;}
+    if(!svcs.length){document.getElementById('train-list').innerHTML='<span style="color:var(--dim);font-size:11px">No departures found</span>';return;}
     document.getElementById('train-list').innerHTML=[...svcs].slice(0,6).map(svc=>{
       const g=tag=>svc.getElementsByTagNameNS('*',tag)[0]?.textContent.trim()||'';
-      const aimed=g('std')||'--:--', exp=g('etd')||'On time', dest=g('locationName'), plat=g('platform');
+      const aimed=g('std')||'--:--',exp=g('etd')||'On time',dest=g('locationName'),plat=g('platform');
       const cps=[...svc.querySelectorAll('callingPointList callingPoint')].map(cp=>cp.getElementsByTagNameNS('*','locationName')[0]?.textContent||'');
       const isCannon=dest.includes('Cannon')||cps.some(n=>n.includes('Cannon'));
-      const isBridge=dest.includes('London Bridge')||cps.some(n=>n.includes('London Bridge'));
+      const isBridge=!isCannon&&(dest.includes('London Bridge')||cps.some(n=>n.includes('London Bridge')));
       const cancelled=exp.toLowerCase()==='cancelled';
       const statusCls=cancelled?'cancelled':exp!=='On time'&&exp!=='No report'&&exp!==aimed?'delayed':'on-time';
       const destCls=isCannon?'cannon':isBridge?'bridge':'';
@@ -411,94 +375,112 @@ async function fetchTrains(){
       return `<div class="tr"><div class="tr-time">${aimed}</div><div class="tr-dest ${destCls}">${prefix}${dest}</div><div class="tr-plat">${plat?'P'+plat:''}</div><div class="tr-status ${statusCls}">${cancelled?'Cancelled':exp}</div></div>`;
     }).join('');
     document.getElementById('train-upd').textContent=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-  }catch(e){document.getElementById('train-list').innerHTML='<span style="color:var(--dim);font-size:11px">⚠ Could not load trains</span>';}
+  }catch(e){
+    console.error('Trains',e);
+    document.getElementById('train-list').innerHTML=`<span style="color:var(--dim);font-size:11px">⚠ ${e.message}</span>`;
+  }
 }
 fetchTrains(); setInterval(fetchTrains,60000);
 
-// ── SPOTIFY PKCE ─────────────────────────────────────────
-function b64url(buf){return btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'')}
-async function pkceChallenge(){
-  const verifier=b64url(crypto.getRandomValues(new Uint8Array(32)));
-  const hash=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(verifier));
-  return{verifier,challenge:b64url(hash)};
-}
-async function spLogin(){
-  const{verifier,challenge}=await pkceChallenge();
-  sessionStorage.setItem('sp_verifier',verifier);
-  const p=new URLSearchParams({client_id:SP_CLIENT_ID,response_type:'code',redirect_uri:REDIRECT_URI,scope:SP_SCOPES,code_challenge_method:'S256',code_challenge:challenge});
-  location.href=`https://accounts.spotify.com/authorize?${p}`;
-}
-async function exchangeCode(code){
-  const res=await fetch('https://accounts.spotify.com/api/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({grant_type:'authorization_code',code,redirect_uri:REDIRECT_URI,client_id:SP_CLIENT_ID,code_verifier:sessionStorage.getItem('sp_verifier')})});
-  const data=await res.json();
-  if(data.access_token){
-    localStorage.setItem('sp_access',data.access_token);
-    localStorage.setItem('sp_refresh',data.refresh_token);
-    localStorage.setItem('sp_exp',Date.now()+data.expires_in*1000);
-    history.replaceState({},'',REDIRECT_URI);
-    initSpotify();
-  }
-}
-async function refreshToken(){
-  const rt=localStorage.getItem('sp_refresh'); if(!rt) return false;
-  const res=await fetch('https://accounts.spotify.com/api/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({grant_type:'refresh_token',refresh_token:rt,client_id:SP_CLIENT_ID})});
-  const data=await res.json();
-  if(data.access_token){localStorage.setItem('sp_access',data.access_token);localStorage.setItem('sp_exp',Date.now()+data.expires_in*1000);if(data.refresh_token)localStorage.setItem('sp_refresh',data.refresh_token);return true;}
+// ── SPOTIFY (Web Playback SDK + PKCE) ────────────────────
+let spT={a:null,r:null,e:0}, spP=null, spS=null;
+
+function rnd(n){const a=new Uint8Array(n);crypto.getRandomValues(a);return Array.from(a,b=>b.toString(16).padStart(2,'0')).join('')}
+async function sha(s){return await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s))}
+function b64u(b){return btoa(String.fromCharCode(...new Uint8Array(b))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+
+window.spLogin=async function(){
+  const v=rnd(64),ch=b64u(await sha(v));
+  document.cookie=`sp_v=${v};max-age=600;path=/;SameSite=Lax`;
+  window.location.href='https://accounts.spotify.com/authorize?'+new URLSearchParams({client_id:C.spId,response_type:'code',redirect_uri:C.spRedirect,scope:C.spScopes,code_challenge_method:'S256',code_challenge:ch,state:rnd(16)});
+};
+
+async function spEx(code){
+  const ck=document.cookie.split(';').map(c=>c.trim()).find(c=>c.startsWith('sp_v='));
+  if(!ck)return false;
+  try{
+    const r=await fetch('https://accounts.spotify.com/api/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({client_id:C.spId,grant_type:'authorization_code',code,redirect_uri:C.spRedirect,code_verifier:ck.split('=')[1]})});
+    const d=await r.json();
+    if(d.access_token){spT={a:d.access_token,r:d.refresh_token,e:Date.now()+d.expires_in*1000};document.cookie='sp_v=;max-age=0;path=/';return true;}
+  }catch(e){}
   return false;
 }
-async function spToken(){
-  if(Date.now()>Number(localStorage.getItem('sp_exp'))-30000){if(!await refreshToken()){localStorage.removeItem('sp_access');return null;}}
-  return localStorage.getItem('sp_access');
+
+async function spRf(){
+  if(!spT.r)return false;
+  try{
+    const r=await fetch('https://accounts.spotify.com/api/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({client_id:C.spId,grant_type:'refresh_token',refresh_token:spT.r})});
+    const d=await r.json();
+    if(d.access_token){spT.a=d.access_token;spT.e=Date.now()+d.expires_in*1000;if(d.refresh_token)spT.r=d.refresh_token;return true;}
+  }catch(e){}
+  return false;
 }
-async function spFetch(url,opts={}){
-  const tok=await spToken(); if(!tok) return null;
-  return fetch(url,{...opts,headers:{...opts.headers,'Authorization':`Bearer ${tok}`}});
+setInterval(async()=>{if(spT.a&&spT.e-Date.now()<120000)await spRf();},60000);
+
+function initSpSDK(){
+  const s=document.createElement('script');
+  s.src='https://sdk.scdn.co/spotify-player.js';
+  document.body.appendChild(s);
+  window.onSpotifyWebPlaybackSDKReady=()=>{
+    spP=new Spotify.Player({
+      name:'🏠 Home Dashboard',
+      getOAuthToken:async cb=>{if(spT.e-Date.now()<60000)await spRf();cb(spT.a);},
+      volume:0.5
+    });
+    spP.addListener('ready',({device_id})=>{console.log('Spotify ready, device:',device_id);});
+    spP.addListener('player_state_changed',s=>{spS=s;rSp(s);});
+    spP.addListener('authentication_error',async()=>{if(!await spRf())rSpL();});
+    spP.connect();
+    rSp(null);
+  };
 }
 
-let spPoll=null;
-function initSpotify(){
-  document.getElementById('sp-login-btn').style.display='none';
-  document.getElementById('sp-player').style.display='block';
-  pollSp();
-  spPoll=setInterval(pollSp,3000);
-}
-async function pollSp(){
-  const res=await spFetch('https://api.spotify.com/v1/me/player/currently-playing');
-  if(!res||res.status===401){localStorage.removeItem('sp_access');document.getElementById('sp-login-btn').style.display='block';document.getElementById('sp-player').style.display='none';clearInterval(spPoll);return;}
-  if(res.status===204){document.getElementById('sp-track').textContent='Nothing playing';document.getElementById('sp-artist').textContent='';document.getElementById('sp-idle').textContent='Open Spotify to start playing';return;}
-  const data=await res.json();
-  if(!data||!data.item) return;
-  const tr=data.item;
-  document.getElementById('sp-track').textContent=tr.name;
-  document.getElementById('sp-artist').textContent=tr.artists.map(a=>a.name).join(', ');
-  document.getElementById('sp-idle').textContent='';
-  const img=tr.album?.images?.[0]?.url;
-  document.getElementById('sp-art').innerHTML=img?`<img src="${img}" alt="">`:'♪';
-  document.getElementById('sp-pfill').style.width=`${(data.progress_ms/tr.duration_ms*100).toFixed(1)}%`;
-  document.getElementById('sp-pp').textContent=data.is_playing?'⏸':'▶';
-}
-async function spCmd(ep,method='PUT'){
-  const tok=await spToken(); if(!tok) return;
-  await fetch(`https://api.spotify.com/v1/me/player/${ep}`,{method,headers:{'Authorization':`Bearer ${tok}`}});
-  setTimeout(pollSp,400);
+function rSp(s){
+  const el=document.getElementById('spB');
+  if(!s||!s.track_window||!s.track_window.current_track){
+    el.innerHTML=`<div class="sw"><div class="sc"><div class="sph">🎵</div></div><div class="sif"><div class="str" style="opacity:.3">Waiting for playback</div><div class="sar" style="margin-top:4px">Open Spotify → select "🏠 Home Dashboard"</div></div></div>`;
+    return;
+  }
+  const t=s.track_window.current_track,img=t.album.images?.[0]?.url||'',p=s.duration?(s.position/s.duration*100):0;
+  el.innerHTML=`<div class="sw"><div class="sc">${img?`<img src="${img}">`:'<div class="sph">🎵</div>'}</div><div class="sif"><div class="str">${t.name}</div><div class="sar">${t.artists.map(a=>a.name).join(', ')} — ${t.album.name}</div><div class="scr"><button class="sb" onclick="spP.previousTrack()">⏮</button><button class="sb pp" onclick="spP.togglePlay()">${s.paused?'▶':'⏸'}</button><button class="sb" onclick="spP.nextTrack()">⏭</button></div></div></div><div class="spr"><div class="spf" style="width:${p.toFixed(1)}%"></div></div>`;
 }
 
-// Wire up buttons after DOM is ready
-document.getElementById('sp-login-btn').addEventListener('click', spLogin);
-document.getElementById('sp-prev').addEventListener('click', ()=>spCmd('previous','POST'));
-document.getElementById('sp-next').addEventListener('click', ()=>spCmd('next','POST'));
-document.getElementById('sp-pp').addEventListener('click', async()=>{
-  const res=await spFetch('https://api.spotify.com/v1/me/player');
-  if(!res) return;
-  const st=await res.json();
-  spCmd(st.is_playing?'pause':'play');
-});
+function rSpL(){
+  document.getElementById('spB').innerHTML=`<div class="sw"><div class="sc"><div class="sph">🎵</div></div><div class="sif"><div class="str" style="opacity:.35">Connect Spotify</div><div class="sar">Premium account required</div><span class="sli" onclick="spLogin()">Log in with Spotify</span></div></div>`;
+}
 
-// Handle OAuth callback or restore session
-const urlParams=new URLSearchParams(location.search);
-const authCode=urlParams.get('code');
-if(authCode) exchangeCode(authCode);
-else if(localStorage.getItem('sp_access')) initSpotify();
+// Progress ticker
+setInterval(()=>{
+  if(spS&&!spS.paused){
+    spS.position=Math.min(spS.position+1000,spS.duration);
+    const el=document.querySelector('.spf');
+    if(el)el.style.width=`${(spS.position/spS.duration*100).toFixed(1)}%`;
+    const pp=document.querySelector('.pp');
+    if(pp)pp.textContent='⏸';
+  }
+},1000);
+
+// Init — handle OAuth callback or restore
+(async()=>{
+  const p=new URLSearchParams(window.location.search),code=p.get('code');
+  if(code){
+    window.history.replaceState({},'',window.location.pathname);
+    if(await spEx(code)){initSpSDK();return;}
+  }
+  // Try restore from localStorage
+  const sa=localStorage.getItem('sp_a'),sr=localStorage.getItem('sp_r'),se=localStorage.getItem('sp_e');
+  if(sa&&se&&Date.now()<Number(se)){
+    spT={a:sa,r:sr,e:Number(se)};
+    initSpSDK();return;
+  }
+  rSpL();
+})();
+
+// Persist token to localStorage when set
+const _origRf=spRf;
+setInterval(()=>{
+  if(spT.a){localStorage.setItem('sp_a',spT.a);localStorage.setItem('sp_r',spT.r||'');localStorage.setItem('sp_e',spT.e);}
+},10000);
 </script>
 </body>
 </html>
