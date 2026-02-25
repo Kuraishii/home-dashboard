@@ -40,44 +40,43 @@ jobs:
       - name: Convert XML to JSON
         run: |
           python3 - <<'EOF'
-          import xml.etree.ElementTree as ET, json, re
+          import xml.etree.ElementTree as ET, json
+          from datetime import datetime
 
-          tree = ET.parse('raw.xml')
-          root = tree.getroot()
+          with open('raw.xml', 'r', encoding='utf-8') as f:
+            raw = f.read()
 
-          ns = {
-            'soap': 'http://schemas.xmlsoap.org/soap/envelope/',
-            'ldb':  'http://thalesgroup.com/RTTI/2017-02-02/ldb/',
-            'lt4':  'http://thalesgroup.com/RTTI/2015-11-27/ldb/types',
-            'lt5':  'http://thalesgroup.com/RTTI/2016-02-16/ldb/types',
-            'lt6':  'http://thalesgroup.com/RTTI/2017-02-02/ldb/types',
-            'lt':   'http://thalesgroup.com/RTTI/2012-01-13/ldb/types',
-          }
+          print("RAW XML PREVIEW:", raw[:500])
 
-          def find_text(el, tag):
-            for prefix, uri in ns.items():
-              found = el.find(f'{{{uri}}}{tag}')
-              if found is not None and found.text:
-                return found.text.strip()
-            return ''
+          root = ET.fromstring(raw)
 
-          # find all service elements anywhere in the tree
-          services = root.findall('.//{*}service')
+          def gtx(el, tag):
+            # wildcard namespace search
+            found = el.findall(f'.//*[local-name()="{tag}"]') 
+            # ET doesn't support local-name(), so iterate manually
+            return None
+
+          def find_all_tag(el, local):
+            return [e for e in el.iter() if e.tag.split('}')[-1] == local]
+
+          def find_one_tag(el, local):
+            results = find_all_tag(el, local)
+            return results[0].text.strip() if results and results[0].text else ''
+
+          services = find_all_tag(root, 'service')
+          print(f"Found {len(services)} services")
+
           trains = []
-
           for svc in services:
-            aimed   = find_text(svc, 'std') or find_text(svc, 'sta') or ''
-            exp     = find_text(svc, 'etd') or find_text(svc, 'eta') or 'On time'
-            dest    = find_text(svc, 'locationName')
-            plat    = find_text(svc, 'platform')
-            op      = find_text(svc, 'operator')
+            aimed = find_one_tag(svc, 'std') or find_one_tag(svc, 'sta')
+            exp   = find_one_tag(svc, 'etd') or find_one_tag(svc, 'eta') or 'On time'
+            dest  = find_one_tag(svc, 'locationName')
+            plat  = find_one_tag(svc, 'platform')
+            op    = find_one_tag(svc, 'operator')
 
-            # calling points — check all callingPointList elements
-            cp_names = []
-            for cp in svc.findall('.//{*}callingPoint'):
-              name = find_text(cp, 'locationName')
-              if name:
-                cp_names.append(name)
+            cp_names = [e.text.strip() for e in find_all_tag(svc, 'locationName') if e.text]
+            # first locationName is the destination itself, rest are calling points
+            cp_names = cp_names[1:] if len(cp_names) > 1 else []
 
             trains.append({
               'aimed': aimed,
@@ -90,14 +89,15 @@ jobs:
             })
 
           out = {
-            'updated': __import__('datetime').datetime.utcnow().strftime('%H:%M'),
+            'updated': datetime.utcnow().strftime('%H:%M'),
             'trains': trains[:10]
           }
 
           with open('trains.json', 'w') as f:
             json.dump(out, f)
 
-          print(f"Written {len(trains)} trains")
+          print(f"Written {len(trains)} trains to trains.json")
+          print("Sample:", json.dumps(trains[0] if trains else {}, indent=2))
           EOF
 
       - name: Commit trains.json
