@@ -39,8 +39,8 @@ jobs:
           XMLEOF
 
           curl -s -X POST \
-            -H "Content-Type: text/xml;charset=UTF-8" \
-            -H "SOAPAction: http://thalesgroup.com/RTTI/2017-02-02/ldb/GetDepBoardWithDetails" \
+            -H 'Content-Type: text/xml;charset=UTF-8' \
+            -H 'SOAPAction: "http://thalesgroup.com/RTTI/2017-02-02/ldb/GetDepBoardWithDetails"' \
             --data @request.xml \
             https://lite.realtime.nationalrail.co.uk/OpenLDBWS/ldb11.asmx > raw.xml
 
