@@ -1,0 +1,109 @@
+name: Fetch Trains
+
+on:
+  schedule:
+    - cron: '* * * * *'   # every minute
+  workflow_dispatch:        # allow manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch Deptford departures from Darwin
+        env:
+          TRAIN_TOKEN: ${{ secrets.TRAIN_TOKEN }}
+        run: |
+          curl -s -X POST \
+            -H "Content-Type: text/xml;charset=UTF-8" \
+            -H "SOAPAction: http://thalesgroup.com/RTTI/2017-02-02/ldb/GetDepBoardWithDetails" \
+            --data "<?xml version='1.0' encoding='utf-8'?>
+          <soap:Envelope xmlns:soap='http://schemas.xmlsoap.org/soap/envelope/'
+            xmlns:typ='http://thalesgroup.com/RTTI/2013-11-28/Token/types'
+            xmlns:ldb='http://thalesgroup.com/RTTI/2017-02-02/ldb/'>
+            <soap:Header>
+              <typ:AccessToken><typ:TokenValue>${TRAIN_TOKEN}</typ:TokenValue></typ:AccessToken>
+            </soap:Header>
+            <soap:Body>
+              <ldb:GetDepBoardWithDetailsRequest>
+                <ldb:numRows>10</ldb:numRows>
+                <ldb:crs>DEP</ldb:crs>
+              </ldb:GetDepBoardWithDetailsRequest>
+            </soap:Body>
+          </soap:Envelope>" \
+            https://lite.realtime.nationalrail.co.uk/OpenLDBWS/ldb11.asmx > raw.xml
+
+      - name: Convert XML to JSON
+        run: |
+          python3 - <<'EOF'
+          import xml.etree.ElementTree as ET, json, re
+
+          tree = ET.parse('raw.xml')
+          root = tree.getroot()
+
+          ns = {
+            'soap': 'http://schemas.xmlsoap.org/soap/envelope/',
+            'ldb':  'http://thalesgroup.com/RTTI/2017-02-02/ldb/',
+            'lt4':  'http://thalesgroup.com/RTTI/2015-11-27/ldb/types',
+            'lt5':  'http://thalesgroup.com/RTTI/2016-02-16/ldb/types',
+            'lt6':  'http://thalesgroup.com/RTTI/2017-02-02/ldb/types',
+            'lt':   'http://thalesgroup.com/RTTI/2012-01-13/ldb/types',
+          }
+
+          def find_text(el, tag):
+            for prefix, uri in ns.items():
+              found = el.find(f'{{{uri}}}{tag}')
+              if found is not None and found.text:
+                return found.text.strip()
+            return ''
+
+          # find all service elements anywhere in the tree
+          services = root.findall('.//{*}service')
+          trains = []
+
+          for svc in services:
+            aimed   = find_text(svc, 'std') or find_text(svc, 'sta') or ''
+            exp     = find_text(svc, 'etd') or find_text(svc, 'eta') or 'On time'
+            dest    = find_text(svc, 'locationName')
+            plat    = find_text(svc, 'platform')
+            op      = find_text(svc, 'operator')
+
+            # calling points — check all callingPointList elements
+            cp_names = []
+            for cp in svc.findall('.//{*}callingPoint'):
+              name = find_text(cp, 'locationName')
+              if name:
+                cp_names.append(name)
+
+            trains.append({
+              'aimed': aimed,
+              'expected': exp,
+              'destination': dest,
+              'platform': plat,
+              'operator': op,
+              'callingPoints': cp_names,
+              'cancelled': exp.lower() == 'cancelled'
+            })
+
+          out = {
+            'updated': __import__('datetime').datetime.utcnow().strftime('%H:%M'),
+            'trains': trains[:10]
+          }
+
+          with open('trains.json', 'w') as f:
+            json.dump(out, f)
+
+          print(f"Written {len(trains)} trains")
+          EOF
+
+      - name: Commit trains.json
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add trains.json
+          git diff --cached --quiet || git commit -m "chore: update trains $(date -u +'%H:%M')"
+          git push
