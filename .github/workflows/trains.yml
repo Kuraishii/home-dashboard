@@ -46,37 +46,46 @@ jobs:
           with open('raw.xml', 'r', encoding='utf-8') as f:
             raw = f.read()
 
-          print("RAW XML PREVIEW:", raw[:500])
+          # Print full XML so we can debug tag names
+          print("=== FULL XML ===")
+          print(raw)
+          print("=== END XML ===")
 
           root = ET.fromstring(raw)
 
-          def gtx(el, tag):
-            # wildcard namespace search
-            found = el.findall(f'.//*[local-name()="{tag}"]') 
-            # ET doesn't support local-name(), so iterate manually
-            return None
+          # Print every unique tag in the document
+          all_tags = sorted(set(e.tag.split('}')[-1] for e in root.iter()))
+          print("ALL TAGS FOUND:", all_tags)
 
           def find_all_tag(el, local):
             return [e for e in el.iter() if e.tag.split('}')[-1] == local]
 
-          def find_one_tag(el, local):
-            results = find_all_tag(el, local)
-            return results[0].text.strip() if results and results[0].text else ''
+          def find_one(el, *locals):
+            for local in locals:
+              results = find_all_tag(el, local)
+              if results and results[0].text:
+                return results[0].text.strip()
+            return ''
 
+          # Try both 'service' and 'trainServices' as container
           services = find_all_tag(root, 'service')
-          print(f"Found {len(services)} services")
+          print(f"Found {len(services)} service elements")
 
           trains = []
           for svc in services:
-            aimed = find_one_tag(svc, 'std') or find_one_tag(svc, 'sta')
-            exp   = find_one_tag(svc, 'etd') or find_one_tag(svc, 'eta') or 'On time'
-            dest  = find_one_tag(svc, 'locationName')
-            plat  = find_one_tag(svc, 'platform')
-            op    = find_one_tag(svc, 'operator')
+            aimed = find_one(svc, 'std', 'sta')
+            exp   = find_one(svc, 'etd', 'eta') or 'On time'
+            dest  = find_one(svc, 'locationName')
+            plat  = find_one(svc, 'platform')
+            op    = find_one(svc, 'operator')
 
-            cp_names = [e.text.strip() for e in find_all_tag(svc, 'locationName') if e.text]
-            # first locationName is the destination itself, rest are calling points
-            cp_names = cp_names[1:] if len(cp_names) > 1 else []
+            # All locationName values inside callingPoint elements only
+            cp_names = [
+              e.text.strip()
+              for cp in find_all_tag(svc, 'callingPoint')
+              for e in find_all_tag(cp, 'locationName')
+              if e.text
+            ]
 
             trains.append({
               'aimed': aimed,
@@ -96,8 +105,9 @@ jobs:
           with open('trains.json', 'w') as f:
             json.dump(out, f)
 
-          print(f"Written {len(trains)} trains to trains.json")
-          print("Sample:", json.dumps(trains[0] if trains else {}, indent=2))
+          print(f"Written {len(trains)} trains")
+          if trains:
+            print("First train:", json.dumps(trains[0], indent=2))
           EOF
 
       - name: Commit trains.json
