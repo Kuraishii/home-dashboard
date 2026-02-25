@@ -4,398 +4,332 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Home Dashboard</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{width:100%;height:100%;overflow:hidden;font-family:'Inter',system-ui,sans-serif;color:#e2e8f0;background:#070b14}
-#bgC{position:fixed;inset:0;z-index:0;width:100%;height:100%}
+#bgC{position:fixed;inset:0;z-index:0}
 
+/* ═══ GRID: 3 cols, 3 rows, explicit placement ═══ */
 .dash{position:relative;z-index:1;width:100%;height:100%;display:grid;
-  grid-template-columns:230px 1fr 250px;
-  grid-template-rows:78px 1fr auto;
-  gap:8px;padding:10px 12px 8px}
-.dash>*{min-width:0;min-height:0}
+  grid-template-columns:210px 1fr 230px;
+  grid-template-rows:80px 1fr 88px;
+  gap:6px;padding:8px 10px}
 
-.c{background:rgba(12,16,28,0.72);border:1px solid rgba(255,255,255,0.05);border-radius:14px;padding:10px 12px;backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);overflow:hidden;display:flex;flex-direction:column}
-.ct{font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:1.6px;color:rgba(255,255,255,0.28);margin-bottom:5px;display:flex;align-items:center;gap:5px;flex-shrink:0}
-.ct i{font-style:normal;font-size:11px}
-.row2{grid-row:span 2}
-.err{display:flex;align-items:center;justify-content:center;flex:1;color:rgba(255,255,255,0.2);font-size:10px;text-align:center;padding:8px;line-height:1.6}
+.c{background:rgba(12,16,28,0.68);border:1px solid rgba(255,255,255,0.05);border-radius:12px;padding:8px 10px;backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);overflow:hidden;display:flex;flex-direction:column}
+.ct{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,0.24);margin-bottom:4px;display:flex;align-items:center;gap:4px;flex-shrink:0}
+.ct i{font-style:normal;font-size:10px}
+.err{color:rgba(255,255,255,0.18);font-size:9px;text-align:center;padding:6px;line-height:1.5}
 
-/* ── Clock ── */
-.ckb{grid-column:1/4;display:flex;align-items:center;justify-content:center;position:relative;gap:16px}
-.ck{font-family:'JetBrains Mono',monospace;font-size:62px;font-weight:300;letter-spacing:-3px;background:linear-gradient(180deg,#f1f5f9,#64748b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
-.cks{font-family:'JetBrains Mono',monospace;font-size:20px;color:rgba(255,255,255,0.18);align-self:flex-start;margin-top:8px}
-.ckm{text-align:left}.ckd{font-size:15px;font-weight:500;color:rgba(255,255,255,0.8)}.ckw{font-size:11px;color:rgba(255,255,255,0.35);margin-top:1px}
-.ra{position:absolute;right:12px;top:50%;transform:translateY(-50%);padding:6px 14px;border-radius:10px;background:rgba(56,143,255,0.08);border:1px solid rgba(56,143,255,0.18);font-size:11px;font-weight:700;color:#60a5fa;display:none;align-items:center;gap:5px;animation:rp 2.5s ease-in-out infinite}
+/* ═══ CLOCK — row 1, all cols ═══ */
+.clock{grid-column:1/4;grid-row:1;display:flex;align-items:center;justify-content:center;gap:18px;position:relative}
+.ck{font-family:'JetBrains Mono',monospace;font-size:72px;font-weight:300;letter-spacing:-4px;background:linear-gradient(180deg,#f1f5f9 30%,#64748b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.cks{font-family:'JetBrains Mono',monospace;font-size:20px;color:rgba(255,255,255,0.15);align-self:flex-start;margin-top:10px}
+.ckd{font-size:17px;font-weight:500;color:rgba(255,255,255,0.8)}
+.ckw{font-size:11px;color:rgba(255,255,255,0.3);margin-top:1px}
+.ra{position:absolute;right:10px;top:50%;transform:translateY(-50%);padding:5px 12px;border-radius:8px;background:rgba(56,143,255,0.08);border:1px solid rgba(56,143,255,0.18);font-size:11px;font-weight:700;color:#60a5fa;display:none;align-items:center;gap:5px;animation:rp 2.5s ease-in-out infinite}
 .ra.on{display:flex}
 @keyframes rp{0%,100%{opacity:1}50%{opacity:.5}}
 
-/* ── Calendar ── */
-.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
-.cal-nav span{font-size:12px;font-weight:600;color:rgba(255,255,255,0.7)}
-.cal-btn{background:rgba(255,255,255,0.06);border:none;color:rgba(255,255,255,0.5);width:22px;height:22px;border-radius:6px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.cal-btn:active{background:rgba(255,255,255,0.12)}
-.cg{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;text-align:center;font-size:10px}
-.ch{color:rgba(255,255,255,0.22);font-weight:700;font-size:8px;padding:2px 0}
-.cd{padding:3px 0;border-radius:6px;line-height:1.2;position:relative;cursor:default}
+/* ═══ LEFT — row 2, col 1 ═══ */
+.left{grid-column:1;grid-row:2;overflow-y:auto;scrollbar-width:none}
+.left::-webkit-scrollbar{display:none}
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px}
+.cal-nav span{font-size:11px;font-weight:600;color:rgba(255,255,255,0.65)}
+.cal-btn{background:rgba(255,255,255,0.06);border:none;color:rgba(255,255,255,0.45);width:20px;height:20px;border-radius:5px;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.cg{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-size:9.5px}
+.ch{color:rgba(255,255,255,0.2);font-weight:700;font-size:7.5px;padding:2px 0}
+.cd{padding:2px 0;border-radius:5px;line-height:1.2;position:relative}
 .cd.to{background:linear-gradient(135deg,#3b82f6,#6366f1);color:#fff;font-weight:800}
 .cd.ho{color:#60a5fa;font-weight:700}
-.cd.ho::after{content:'';position:absolute;bottom:0px;left:50%;transform:translateX(-50%);width:3px;height:3px;background:#60a5fa;border-radius:50%}
-.cd.om{opacity:.15}.cd.we{color:rgba(255,255,255,0.2)}
-.cd .moon-mark{display:block;font-size:6px;line-height:1;margin-top:-1px}
+.cd.om{opacity:.12}.cd.we{color:rgba(255,255,255,0.18)}
+.cd .mm{display:block;font-size:5px;line-height:1;margin-top:-1px}
+.sep{height:1px;background:rgba(255,255,255,0.04);margin:6px 0}
+.eb{background:rgba(255,255,255,0.02);border-radius:7px;padding:5px 7px;margin-bottom:4px}
+.el{font-size:7px;color:rgba(255,255,255,0.2);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px}
+.ev{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500}
+.es{font-size:8px;color:rgba(255,255,255,0.25);margin-top:1px}
+.sp-r{display:flex;gap:8px}.sp-r .si{display:flex;align-items:center;gap:3px}
+.si-i{font-size:12px}.si-t{font-size:11px;font-weight:500;font-family:'JetBrains Mono',monospace}
+.dlb{height:3px;background:rgba(255,255,255,0.04);border-radius:2px;margin-top:3px;overflow:hidden}
+.dlf{height:100%;background:linear-gradient(90deg,#fbbf24,#f97316);border-radius:2px}
+.uvb{height:4px;border-radius:2px;background:linear-gradient(90deg,#4ade80,#facc15,#fb923c,#ef4444,#a855f7);margin-top:3px;position:relative}
+.uvm{position:absolute;top:-3px;width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid rgba(0,0,0,.5);transform:translateX(-50%)}
+.mr{display:flex;align-items:center;gap:5px}
+.me{font-size:20px;filter:drop-shadow(0 0 6px rgba(167,139,250,.4))}
+.mn-n{font-size:10px;font-weight:600;color:#a78bfa}
+.mn-s{font-size:8px;color:rgba(255,255,255,.25)}
 
-/* ── Env card (Sun/UV/Moon) ── */
-.env-grid{display:flex;flex-direction:column;gap:6px;flex:1}
-.env-box{background:rgba(255,255,255,0.02);border-radius:9px;padding:6px 8px}
-.env-label{font-size:7.5px;color:rgba(255,255,255,0.22);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px}
-.env-val{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:500}
-.env-sub{font-size:8px;color:rgba(255,255,255,0.28);margin-top:1px}
-.sun-pair{display:flex;gap:10px}.sun-pair .si{display:flex;align-items:center;gap:3px}
-.sun-pair .si-ic{font-size:13px}.sun-pair .si-tm{font-size:12px;font-weight:500;font-family:'JetBrains Mono',monospace}
-.dl-bar{height:3px;background:rgba(255,255,255,0.04);border-radius:2px;margin-top:3px;overflow:hidden}
-.dl-fill{height:100%;background:linear-gradient(90deg,#fbbf24,#f97316);border-radius:2px}
-.uv-bar{height:5px;border-radius:3px;background:linear-gradient(90deg,#4ade80,#facc15,#fb923c,#ef4444,#a855f7);margin-top:3px;position:relative}
-.uv-mk{position:absolute;top:-3px;width:11px;height:11px;border-radius:50%;background:#fff;border:2px solid rgba(0,0,0,0.5);transform:translateX(-50%)}
-.moon-row{display:flex;align-items:center;gap:6px}
-.moon-e{font-size:24px;filter:drop-shadow(0 0 8px rgba(167,139,250,0.4))}
-.moon-nm{font-size:11px;font-weight:600;color:#a78bfa}
-.moon-il{font-size:8px;color:rgba(255,255,255,0.28)}
-
-/* ── Weather ── */
-.wn{display:flex;align-items:center;gap:10px;margin-bottom:4px}
-.wi{font-size:36px}.wt{font-size:34px;font-weight:300;font-family:'JetBrains Mono',monospace;line-height:1}
-.wds{font-size:11px;color:rgba(255,255,255,0.4)}
-.wde{display:flex;gap:10px;font-size:9px;color:rgba(255,255,255,0.35);margin-top:2px;flex-wrap:wrap}
+/* ═══ CENTER — row 2, col 2 ═══ */
+.center{grid-column:2;grid-row:2;overflow-y:auto;scrollbar-width:none}
+.center::-webkit-scrollbar{display:none}
+.wn{display:flex;align-items:center;gap:8px;margin-bottom:3px}
+.wi{font-size:32px}
+.wt{font-size:30px;font-weight:300;font-family:'JetBrains Mono',monospace;line-height:1}
+.wds{font-size:10px;color:rgba(255,255,255,0.38)}
+.wde{display:flex;gap:8px;font-size:8px;color:rgba(255,255,255,0.3);margin-top:1px}
 .wde span{display:flex;align-items:center;gap:2px}
-.hs{display:flex;gap:3px;overflow-x:auto;padding:4px 0 2px;flex-shrink:0;scrollbar-width:none}
+.hs{display:flex;gap:2px;overflow-x:auto;padding:6px 0 4px;scrollbar-width:none}
 .hs::-webkit-scrollbar{display:none}
-.hi{flex-shrink:0;text-align:center;padding:3px 5px;border-radius:7px;background:rgba(255,255,255,0.02);min-width:38px}
-.hi.rn{background:rgba(56,143,255,0.08);border:1px solid rgba(56,143,255,0.1)}
-.ht{font-size:8px;color:rgba(255,255,255,0.28)}.hic{font-size:14px;margin:1px 0}.hv{font-size:10px;font-weight:500}
-.fr{display:flex;gap:4px;margin-top:4px;flex-shrink:0}
-.fd{flex:1;text-align:center;padding:4px 2px;background:rgba(255,255,255,0.02);border-radius:7px}
-.fn{font-size:8px;color:rgba(255,255,255,0.28)}.fi{font-size:14px;margin:1px 0}.ft{font-size:9px}.fh{font-weight:700}.fl{color:rgba(255,255,255,0.3)}
+.hi{flex-shrink:0;text-align:center;padding:3px 4px;border-radius:6px;background:rgba(255,255,255,0.015);min-width:36px}
+.hi.rn{background:rgba(56,143,255,0.07);border:1px solid rgba(56,143,255,0.08)}
+.hi.sev{background:rgba(255,180,50,0.07);border:1px solid rgba(255,180,50,0.1)}
+.ht{font-size:7px;color:rgba(255,255,255,0.25)}.hic{font-size:13px;margin:1px 0}.hv{font-size:9px;font-weight:500}
+.hi .slbl{font-size:5.5px;color:#fbbf24;font-weight:700;text-transform:uppercase;letter-spacing:.3px}
+.fr{display:flex;gap:3px;padding-top:6px}
+.fd{flex:1;text-align:center;padding:4px 2px;background:rgba(255,255,255,0.015);border-radius:6px}
+.fn{font-size:7px;color:rgba(255,255,255,0.25)}.fi{font-size:13px;margin:1px 0}.ft{font-size:8px}.fh{font-weight:700}.fl{color:rgba(255,255,255,0.28)}
 
-/* ── Trains ── */
+/* ═══ RIGHT — row 2, col 3 ═══ */
+.right{grid-column:3;grid-row:2;overflow:hidden}
 .tl{flex:1;display:flex;flex-direction:column;gap:2px;overflow-y:auto;scrollbar-width:none}
 .tl::-webkit-scrollbar{display:none}
-.ti{display:flex;align-items:center;gap:4px;padding:5px 7px;border-radius:7px;background:rgba(255,255,255,0.02);font-size:10px;flex-shrink:0}
-.ti.cs{font-weight:800;background:rgba(255,255,255,0.035)}
+.ti{display:flex;align-items:center;gap:3px;padding:4px 6px;border-radius:6px;background:rgba(255,255,255,0.02);font-size:9px;flex-shrink:0}
+.ti.cs{font-weight:800;background:rgba(255,255,255,0.03)}
 .ti.lb{border-left:3px solid #3b82f6}
-.tm{font-family:'JetBrains Mono',monospace;font-weight:600;min-width:36px;font-size:11px}
+.tm{font-family:'JetBrains Mono',monospace;font-weight:600;min-width:34px;font-size:10px}
 .td{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tn{font-size:9px;color:rgba(255,255,255,0.28);min-width:20px;text-align:right}
-.tp{font-size:8px;color:rgba(255,255,255,0.22);min-width:16px;text-align:center}
-.ts{font-size:8px;padding:2px 5px;border-radius:3px;font-weight:700;white-space:nowrap}
-.ts.ot{background:rgba(74,222,128,0.08);color:#4ade80}
-.ts.dl{background:rgba(251,146,60,0.08);color:#fb923c}
-.ts.cx{background:rgba(239,68,68,0.08);color:#ef4444}
-.tlg{display:flex;gap:8px;font-size:7.5px;color:rgba(255,255,255,0.2);margin-top:4px;flex-shrink:0;padding-top:3px;border-top:1px solid rgba(255,255,255,0.03)}
+.tn{font-size:8px;color:rgba(255,255,255,0.25);min-width:18px;text-align:right}
+.tp{font-size:7px;color:rgba(255,255,255,0.2);min-width:14px;text-align:center}
+.ts{font-size:7px;padding:2px 4px;border-radius:3px;font-weight:700;white-space:nowrap}
+.ts.ot{background:rgba(74,222,128,0.07);color:#4ade80}
+.ts.dl{background:rgba(251,146,60,0.07);color:#fb923c}
+.ts.cx{background:rgba(239,68,68,0.07);color:#ef4444}
+.tlg{display:flex;gap:6px;font-size:7px;color:rgba(255,255,255,0.18);margin-top:3px;flex-shrink:0;padding-top:3px;border-top:1px solid rgba(255,255,255,0.03)}
 .tlg span{display:flex;align-items:center;gap:2px}
 
-/* ── Spotify ── */
-.sw{display:flex;align-items:center;gap:12px;width:100%}
-.sc{width:80px;height:80px;border-radius:12px;background:rgba(255,255,255,0.03);overflow:hidden;flex-shrink:0}
+/* ═══ BOTTOM — row 3, all cols ═══ */
+.bottom{grid-column:1/4;grid-row:3}
+.sw{display:flex;align-items:center;gap:14px;height:100%}
+.sc{width:62px;height:62px;border-radius:10px;background:rgba(255,255,255,0.03);overflow:hidden;flex-shrink:0}
 .sc img{width:100%;height:100%;object-fit:cover}
-.sph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:30px;background:linear-gradient(135deg,#1a1a2e,#16213e)}
+.sph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:24px;background:linear-gradient(135deg,#1a1a2e,#16213e)}
 .sif{flex:1;min-width:0}
 .str{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sar{font-size:11px;color:rgba(255,255,255,0.38);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
-.scr{display:flex;align-items:center;gap:10px;margin-top:8px}
-.sb{background:none;border:none;color:#e2e8f0;font-size:18px;cursor:pointer;padding:3px;opacity:.5;line-height:1}
+.sar{font-size:10px;color:rgba(255,255,255,0.35);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.scr{display:flex;align-items:center;gap:10px;margin-top:6px}
+.sb{background:none;border:none;color:#e2e8f0;font-size:16px;cursor:pointer;padding:2px;opacity:.5;line-height:1}
 .sb:active{opacity:1}
-.sb.pp{font-size:20px;opacity:1;background:#1db954;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;color:#fff}
-.spr{height:3px;background:rgba(255,255,255,0.06);border-radius:2px;margin-top:8px;overflow:hidden}
+.sb.pp{font-size:18px;opacity:1;background:#1db954;border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;color:#fff}
+.spr{height:3px;background:rgba(255,255,255,0.05);border-radius:2px;margin-top:6px;overflow:hidden;max-width:400px}
 .spf{height:100%;background:#1db954;border-radius:2px}
-.slo{color:#1db954;font-weight:800;letter-spacing:.5px;font-size:9px}
-.sli{display:inline-block;background:#1db954;color:#000;padding:6px 16px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;margin-top:8px}
+.slo{color:#1db954;font-weight:800;letter-spacing:.5px;font-size:8px}
+.sli{display:inline-block;background:#1db954;color:#000;padding:5px 14px;border-radius:18px;font-size:10px;font-weight:700;cursor:pointer;margin-top:6px}
 </style>
 </head>
 <body>
 <canvas id="bgC"></canvas>
 <div class="dash">
-  <!-- Row 1: Clock -->
-  <div class="ckb">
+  <!-- Explicit grid placement for every element -->
+  <div class="clock">
     <span class="ck" id="ck">00:00</span><span class="cks" id="cks">00</span>
-    <div class="ckm"><div class="ckd" id="ckd"></div><div class="ckw" id="ckw"></div></div>
-    <div class="ra" id="ra">🌧️ RAIN INCOMING — <span id="rw"></span></div>
+    <div><div class="ckd" id="ckd"></div><div class="ckw" id="ckw"></div></div>
+    <div class="ra" id="ra">🌧️ RAIN — <span id="rw"></span></div>
   </div>
-  <!-- Row 2: Calendar | Weather | Trains -->
-  <div class="c" id="calC"><div id="calB"></div></div>
-  <div class="c" id="wxC">
-    <div class="ct"><i>🌤️</i>Weather</div>
-    <div id="wxB" style="flex:1;display:flex;flex-direction:column;overflow-y:auto;scrollbar-width:none"></div>
-  </div>
-  <div class="c row2" id="trC">
-    <div class="ct"><i>🚂</i>Deptford → London</div>
-    <div id="trB" style="flex:1;display:flex;flex-direction:column"></div>
-  </div>
-  <!-- Row 3: Env | Spotify | (trains cont) -->
-  <div class="c" id="envC">
-    <div class="ct"><i>🌙</i>Sun · UV · Moon</div>
-    <div id="envB" style="flex:1;display:flex;flex-direction:column"></div>
-  </div>
-  <div class="c" id="spC">
+
+  <div class="c left" id="leftC"><div id="leftB"></div></div>
+  <div class="c center" id="centerC"><div class="ct"><i>🌤️</i>Weather</div><div id="centerB"></div></div>
+  <div class="c right" id="rightC"><div class="ct"><i>🚂</i>Deptford → London</div><div id="rightB" style="flex:1;display:flex;flex-direction:column"></div></div>
+
+  <div class="c bottom" id="bottomC">
     <div class="ct"><span class="slo">● SPOTIFY</span></div>
     <div id="spB" style="flex:1;display:flex;align-items:center"></div>
   </div>
 </div>
 
 <script>
-const C={
-  lat:51.4742,lon:-0.0253,tz:'Europe/London',
-  trApi:'https://huxley2.azurewebsites.net',trCrs:'DEP',
-  spId:'a61a2fffda4f42bb8805650ff52bf415',
-  spRedirect:window.location.origin+window.location.pathname,
-  spScopes:'streaming user-read-email user-read-private user-read-playback-state user-modify-playback-state',
-};
-
-function lHour(){return+new Date().toLocaleString('en-GB',{timeZone:C.tz,hour:'numeric',hour12:false})}
-function lMin(){return+new Date().toLocaleString('en-GB',{timeZone:C.tz,minute:'numeric'})}
+const C={lat:51.4742,lon:-0.0253,tz:'Europe/London',trApi:'https://huxley2.azurewebsites.net',trCrs:'DEP',spId:'a61a2fffda4f42bb8805650ff52bf415',spRedirect:window.location.origin+window.location.pathname,spScopes:'streaming user-read-email user-read-private user-read-playback-state user-modify-playback-state'};
+function lH(){return+new Date().toLocaleString('en-GB',{timeZone:C.tz,hour:'numeric',hour12:false})}
+function lM(){return+new Date().toLocaleString('en-GB',{timeZone:C.tz,minute:'numeric'})}
 function pad(n){return String(n).padStart(2,'0')}
 function todayISO(){const p=new Date().toLocaleDateString('en-GB',{timeZone:C.tz,year:'numeric',month:'2-digit',day:'2-digit'}).split('/');return`${p[2]}-${p[1]}-${p[0]}`}
 
-// ══════════════════════════════
-//  ACCURATE MOON PHASE
-// ══════════════════════════════
-// Reference: known new moon Jan 6, 2000 18:14 UTC
-const MOON_REF=Date.UTC(2000,0,6,18,14,0); // ms
-const SYNODIC=29.53058770576; // days
+// ── Moon ──
+const MREF=Date.UTC(2000,0,6,18,14,0),SYN=29.53058770576;
+function mAge(d){let a=((d.getTime()-MREF)/864e5)%SYN;return a<0?a+SYN:a}
+function mIl(a){return Math.round((1-Math.cos(2*Math.PI*a/SYN))/2*100)}
+function mInfo(d){const a=mAge(d),il=mIl(a);let p,e;if(a<1.85){p='New Moon';e='🌑'}else if(a<7.38){p='Waxing Crescent';e='🌒'}else if(a<9.23){p='First Quarter';e='🌓'}else if(a<13.77){p='Waxing Gibbous';e='🌔'}else if(a<15.77){p='Full Moon';e='🌕'}else if(a<20.31){p='Waning Gibbous';e='🌖'}else if(a<22.15){p='Last Quarter';e='🌗'}else if(a<27.69){p='Waning Crescent';e='🌘'}else{p='New Moon';e='🌑'}return{phase:p,emoji:e,age:Math.round(a*10)/10,il}}
+function mMarkers(y,m){const mk={},last=new Date(y,m+1,0).getDate();let bN={d:0,v:99},bF={d:0,v:99};for(let d=1;d<=last;d++){const a=mAge(new Date(y,m,d,12));const dN=Math.min(a,SYN-a),dF=Math.abs(a-SYN/2);if(dN<bN.v){bN={d,v:dN}}if(dF<bF.v){bF={d,v:dF}}}if(bN.v<1.5)mk[bN.d]='🌑';if(bF.v<1.5)mk[bF.d]='🌕';return mk}
 
-function moonAge(date){
-  const diff=(date.getTime()-MOON_REF)/86400000; // days since ref
-  let age=diff%SYNODIC;
-  if(age<0)age+=SYNODIC;
-  return age;
-}
-function moonIllum(age){
-  // Cosine approximation
-  return Math.round((1-Math.cos(2*Math.PI*age/SYNODIC))/2*100);
-}
-function moonInfo(date){
-  const age=moonAge(date);
-  const il=moonIllum(age);
-  let p,e;
-  if(age<1.85){p='New Moon';e='🌑'}
-  else if(age<7.38){p='Waxing Crescent';e='🌒'}
-  else if(age<9.23){p='First Quarter';e='🌓'}
-  else if(age<13.77){p='Waxing Gibbous';e='🌔'}
-  else if(age<15.77){p='Full Moon';e='🌕'}
-  else if(age<20.31){p='Waning Gibbous';e='🌖'}
-  else if(age<22.15){p='Last Quarter';e='🌗'}
-  else if(age<27.69){p='Waning Crescent';e='🌘'}
-  else{p='New Moon';e='🌑'}
-  return{phase:p,emoji:e,age:Math.round(age*10)/10,il};
-}
-// Find full/new moon days in a given month
-function moonMarkers(year,month){
-  const markers={};
-  const last=new Date(year,month+1,0).getDate();
-  for(let d=1;d<=last;d++){
-    const age=moonAge(new Date(year,month,d,12,0,0));
-    if(age<1.2||age>SYNODIC-1.2)markers[d]='🌑';
-    else if(Math.abs(age-SYNODIC/2)<1.2)markers[d]='🌕';
-  }
-  return markers;
-}
-
-// ══════════════════════════════
-//  BACKGROUND
-// ══════════════════════════════
-const cv=document.getElementById('bgC'),cx=cv.getContext('2d');
-let wxCd=0,stars=[];
+// ── Background ──
+const cv=document.getElementById('bgC'),cx=cv.getContext('2d');let wxCd=0,stars=[];
 function rcv(){cv.width=innerWidth;cv.height=innerHeight;stars=[]}
 rcv();addEventListener('resize',rcv);
 const RAIN=[51,53,55,56,57,61,63,65,66,67,80,81,82,95,96,99];
-function gtod(){const h=lHour();if(h>=5&&h<7)return'dawn';if(h>=7&&h<12)return'morning';if(h>=12&&h<17)return'afternoon';if(h>=17&&h<20)return'sunset';if(h>=20&&h<22)return'dusk';return'night'}
-function bgColors(t,w){
+function gtod(){const h=lH();if(h>=5&&h<7)return'dawn';if(h>=7&&h<12)return'morning';if(h>=12&&h<17)return'afternoon';if(h>=17&&h<20)return'sunset';if(h>=20&&h<22)return'dusk';return'night'}
+function bgCols(t,w){
   if(RAIN.includes(w))return t==='night'||t==='dusk'?['#080c18','#101828','#162035']:['#1e2d3d','#2a3f52','#3a5268'];
   if([2,3,45,48].includes(w))return t==='night'||t==='dusk'?['#0b0f1a','#131a28','#182030']:['#141e2e','#1e2e40','#283a50'];
-  return({dawn:['#1a0533','#3b1261','#7c2d91','#d4456c','#f4a261'],morning:['#0b1d3a','#163d6a','#2980b9','#5dade2'],afternoon:['#0e2439','#1a4a6e','#2471a3','#5499c7'],sunset:['#1a0a1e','#4a1942','#8e2444','#d35400','#f5b041'],dusk:['#0d0b2b','#1b1464','#2e1f8a','#4834a8'],night:['#020618','#0a1628','#0f2035','#152a45']})[t]||['#020618','#0a1628','#0f2035'];
+  return({dawn:['#1a0533','#3b1261','#7c2d91','#d4456c','#f4a261'],morning:['#0b1d3a','#163d6a','#2980b9','#5dade2'],afternoon:['#0e2439','#1a4a6e','#2471a3','#5499c7'],sunset:['#1a0a1e','#4a1942','#8e2444','#d35400','#f5b041'],dusk:['#0d0b2b','#1b1464','#2e1f8a','#4834a8'],night:['#020618','#0a1628','#0f2035','#152a45']})[t]||['#020618','#0a1628','#0f2035']
 }
 function drawBg(){
-  const t=gtod(),cols=bgColors(t,wxCd),g=cx.createLinearGradient(0,0,cv.width*0.3,cv.height);
+  const t=gtod(),cols=bgCols(t,wxCd),g=cx.createLinearGradient(0,0,cv.width*.3,cv.height);
   cols.forEach((c,i)=>g.addColorStop(i/(cols.length-1),c));cx.fillStyle=g;cx.fillRect(0,0,cv.width,cv.height);
-  if(['night','dusk','dawn'].includes(t)){
-    if(!stars.length)for(let i=0;i<90;i++)stars.push({x:Math.random()*cv.width,y:Math.random()*cv.height*.75,r:Math.random()*1.4+.2,a:Math.random()*6.28,s:Math.random()*.008+.003});
-    for(const p of stars){p.a+=p.s;const al=.15+Math.sin(p.a)*.4;if(al>0){cx.beginPath();cx.arc(p.x,p.y,p.r,0,6.28);cx.fillStyle=`rgba(200,210,255,${al})`;cx.fill()}}
-  }else stars=[];
+  if(['night','dusk','dawn'].includes(t)){if(!stars.length)for(let i=0;i<90;i++)stars.push({x:Math.random()*cv.width,y:Math.random()*cv.height*.75,r:Math.random()*1.4+.2,a:Math.random()*6.28,s:Math.random()*.008+.003});for(const p of stars){p.a+=p.s;const al=.15+Math.sin(p.a)*.4;if(al>0){cx.beginPath();cx.arc(p.x,p.y,p.r,0,6.28);cx.fillStyle=`rgba(200,210,255,${al})`;cx.fill()}}}else stars=[];
   if(RAIN.includes(wxCd)){cx.strokeStyle='rgba(120,180,255,0.07)';cx.lineWidth=.7;for(let i=0;i<50;i++){const x=Math.random()*cv.width,y=(Date.now()*.15+i*43)%cv.height;cx.beginPath();cx.moveTo(x,y);cx.lineTo(x-2,y+14);cx.stroke()}}
   if(t==='dawn'||t==='sunset'){const gx=t==='dawn'?cv.width*.8:cv.width*.2,grd=cx.createRadialGradient(gx,cv.height*.9,0,gx,cv.height*.9,cv.height*.6);grd.addColorStop(0,t==='dawn'?'rgba(255,140,50,0.12)':'rgba(255,80,40,0.1)');grd.addColorStop(1,'transparent');cx.fillStyle=grd;cx.fillRect(0,0,cv.width,cv.height)}
-  requestAnimationFrame(drawBg);
+  requestAnimationFrame(drawBg)
 }
 drawBg();
 
-// ══════════════════════════════
-//  CLOCK
-// ══════════════════════════════
-function uCk(){const h=lHour(),m=lMin(),n=new Date(),o={timeZone:C.tz};document.getElementById('ck').textContent=pad(h)+':'+pad(m);document.getElementById('cks').textContent=pad(n.getSeconds());document.getElementById('ckd').textContent=n.toLocaleDateString('en-GB',{...o,day:'numeric',month:'long',year:'numeric'});document.getElementById('ckw').textContent=n.toLocaleDateString('en-GB',{...o,weekday:'long'})}
+// ── Clock ──
+function uCk(){const h=lH(),m=lM(),n=new Date(),o={timeZone:C.tz};document.getElementById('ck').textContent=pad(h)+':'+pad(m);document.getElementById('cks').textContent=pad(n.getSeconds());document.getElementById('ckd').textContent=n.toLocaleDateString('en-GB',{...o,day:'numeric',month:'long',year:'numeric'});document.getElementById('ckw').textContent=n.toLocaleDateString('en-GB',{...o,weekday:'long'})}
 setInterval(uCk,1000);uCk();
 
-// ══════════════════════════════
-//  BANK HOLIDAYS
-// ══════════════════════════════
+// ── Bank Holidays ──
 const BH={'2025-01-01':"New Year's",'2025-04-18':'Good Friday','2025-04-21':'Easter Mon','2025-05-05':'Early May','2025-05-26':'Spring BH','2025-08-25':'Summer BH','2025-12-25':'Christmas','2025-12-26':'Boxing Day','2026-01-01':"New Year's",'2026-04-03':'Good Friday','2026-04-06':'Easter Mon','2026-05-04':'Early May','2026-05-25':'Spring BH','2026-08-31':'Summer BH','2026-12-25':'Christmas','2026-12-28':'Boxing Day (sub)','2027-01-01':"New Year's",'2027-03-26':'Good Friday','2027-03-29':'Easter Mon','2027-05-03':'Early May','2027-05-31':'Spring BH','2027-08-30':'Summer BH','2027-12-27':'Christmas (sub)','2027-12-28':'Boxing Day (sub)'};
 
-// ══════════════════════════════
-//  CALENDAR
-// ══════════════════════════════
-let calOff=0;
-window.calPrev=function(){calOff--;rCal()};
-window.calNext=function(){calOff++;rCal()};
-window.calToday=function(){calOff=0;rCal()};
+// ── Left panel: Calendar + Env ──
+let calO=0;
+window.calP=function(){calO--;rLeft()};window.calN=function(){calO++;rLeft()};window.calT=function(){calO=0;rLeft()};
 
-function rCal(){
-  const now=new Date(),vd=new Date(now.getFullYear(),now.getMonth()+calOff,1);
-  const vy=vd.getFullYear(),vm=vd.getMonth();
-  const f=new Date(vy,vm,1),l=new Date(vy,vm+1,0),sd=(f.getDay()+6)%7;
-  const isCur=vy===now.getFullYear()&&vm===now.getMonth();
-  const markers=moonMarkers(vy,vm);
-  const mLabel=vd.toLocaleString('en-GB',{month:'long',year:'numeric'});
-
-  let h=`<div class="cal-nav"><button class="cal-btn" onclick="calPrev()">◀</button><span${!isCur?' onclick="calToday()" style="cursor:pointer"':''}>${mLabel}</span><button class="cal-btn" onclick="calNext()">▶</button></div><div class="cg">`;
+function rLeft(){
+  const now=new Date(),vd=new Date(now.getFullYear(),now.getMonth()+calO,1),vy=vd.getFullYear(),vm=vd.getMonth();
+  const l=new Date(vy,vm+1,0),sd=(new Date(vy,vm,1).getDay()+6)%7,isCur=vy===now.getFullYear()&&vm===now.getMonth();
+  const mk=mMarkers(vy,vm);
+  let h=`<div class="cal-nav"><button class="cal-btn" onclick="calP()">◀</button><span${!isCur?' onclick="calT()" style="cursor:pointer;opacity:.7"':''}>${vd.toLocaleString('en-GB',{month:'long',year:'numeric'})}</span><button class="cal-btn" onclick="calN()">▶</button></div><div class="cg">`;
   ['Mo','Tu','We','Th','Fr','Sa','Su'].forEach(d=>h+=`<div class="ch">${d}</div>`);
   const pl=new Date(vy,vm,0).getDate();
   for(let i=sd-1;i>=0;i--)h+=`<div class="cd om">${pl-i}</div>`;
   for(let d=1;d<=l.getDate();d++){
-    const ds=`${vy}-${pad(vm+1)}-${pad(d)}`;
-    const it=isCur&&d===now.getDate();
-    const ih=BH[ds],dw=(new Date(vy,vm,d).getDay()+6)%7,iw=dw>=5;
-    let cl='cd';if(it)cl+=' to';else if(ih)cl+=' ho';else if(iw)cl+=' we';
-    const mm=markers[d]?`<span class="moon-mark">${markers[d]}</span>`:'';
-    h+=`<div class="${cl}"${ih?` title="${ih}"`:``}>${d}${mm}</div>`;
+    const ds=`${vy}-${pad(vm+1)}-${pad(d)}`,it=isCur&&d===now.getDate(),ih=BH[ds],dw=(new Date(vy,vm,d).getDay()+6)%7;
+    let cl='cd';if(it)cl+=' to';else if(ih)cl+=' ho';else if(dw>=5)cl+=' we';
+    h+=`<div class="${cl}"${ih?` title="${ih}"`:``}>${d}${mk[d]?`<span class="mm">${mk[d]}</span>`:''}</div>`;
   }
-  const tot=sd+l.getDate(),rem=tot%7?7-tot%7:0;
-  for(let i=1;i<=rem;i++)h+=`<div class="cd om">${i}</div>`;
-  document.getElementById('calB').innerHTML=h+'</div>';
+  const rem=(sd+l.getDate())%7;if(rem)for(let i=1;i<=7-rem;i++)h+=`<div class="cd om">${i}</div>`;
+  h+='</div>';
+
+  // Env section
+  const mn=mInfo(now);
+  h+=`<div class="sep"></div>
+  <div class="eb" id="sunBox"><div class="el">🌅 Sunrise & Sunset</div><div class="es" style="opacity:.3">Loading...</div></div>
+  <div class="eb" id="uvBox"><div class="el">🔆 UV Index</div><div class="es" style="opacity:.3">Loading...</div></div>
+  <div class="eb"><div class="el">🌙 Moon</div><div class="mr"><span class="me">${mn.emoji}</span><div><div class="mn-n">${mn.phase}</div><div class="mn-s">${mn.il}% illuminated · Day ${mn.age}</div></div></div></div>`;
+
+  document.getElementById('leftB').innerHTML=h;
+  if(sunCache)fillEnv();
 }
-rCal();
+rLeft();
 
-// ══════════════════════════════
-//  ENVIRONMENT CARD (standalone)
-// ══════════════════════════════
-function rEnv(sunData){
-  const mn=moonInfo(new Date());
-  let sunHtml='',uvHtml='';
-
-  if(sunData){
-    const srH=sunData.sunrise.slice(11,16),ssH=sunData.sunset.slice(11,16);
-    const srMs=new Date(sunData.sunrise).getTime(),ssMs=new Date(sunData.sunset).getTime();
-    const dm=(ssMs-srMs)/60000,dh=Math.floor(dm/60),dmi=Math.round(dm%60);
-    const prog=Math.max(0,Math.min(100,(Date.now()-srMs)/(ssMs-srMs)*100));
-    sunHtml=`<div class="env-box"><div class="env-label">🌅 Sunrise & Sunset</div><div class="sun-pair"><div class="si"><span class="si-ic">↑</span><span class="si-tm">${srH}</span></div><div class="si"><span class="si-ic">↓</span><span class="si-tm">${ssH}</span></div></div><div class="dl-bar"><div class="dl-fill" style="width:${prog}%"></div></div><div class="env-sub">${dh}h ${dmi}m daylight</div></div>`;
-
-    const uv=sunData.uv,uvPct=Math.min(100,uv/11*100);
-    let uvLbl,uvAdv;
-    if(uv<=2){uvLbl='Low';uvAdv='No protection needed'}else if(uv<=5){uvLbl='Moderate';uvAdv='Sunscreen recommended'}else if(uv<=7){uvLbl='High';uvAdv='Reduce sun exposure'}else if(uv<=10){uvLbl='Very High';uvAdv='Stay in shade'}else{uvLbl='Extreme';uvAdv='Avoid outdoors'}
-    uvHtml=`<div class="env-box"><div class="env-label">🔆 UV Index</div><div class="env-val">${uv.toFixed(1)} <span style="font-size:10px;font-weight:600;font-family:Inter">${uvLbl}</span></div><div class="uv-bar"><div class="uv-mk" style="left:${uvPct}%"></div></div><div class="env-sub">${uvAdv}</div></div>`;
-  }
-
-  document.getElementById('envB').innerHTML=`<div class="env-grid">
-    ${sunHtml}${uvHtml}
-    <div class="env-box"><div class="env-label">🌙 Moon Phase</div><div class="moon-row"><span class="moon-e">${mn.emoji}</span><div><div class="moon-nm">${mn.phase}</div><div class="moon-il">${mn.il}% illuminated · Day ${mn.age}</div></div></div></div>
-  </div>`;
-}
-rEnv(null); // render moon immediately
-
-// ══════════════════════════════
-//  WEATHER
-// ══════════════════════════════
+// ── Weather ──
 const WI={0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌦️',55:'🌧️',56:'🌨️',57:'🌨️',61:'🌧️',63:'🌧️',65:'🌧️',66:'🌨️',67:'🌨️',71:'🌨️',73:'🌨️',75:'❄️',77:'❄️',80:'🌦️',81:'🌧️',82:'⛈️',85:'🌨️',86:'🌨️',95:'⛈️',96:'⛈️',99:'⛈️'};
 const WN={0:'🌙',1:'🌙'};
 const WT={0:'Clear sky',1:'Mainly clear',2:'Partly cloudy',3:'Overcast',45:'Foggy',48:'Rime fog',51:'Light drizzle',53:'Drizzle',55:'Dense drizzle',61:'Light rain',63:'Moderate rain',65:'Heavy rain',66:'Freezing rain',67:'Heavy freezing rain',71:'Light snow',73:'Snow',75:'Heavy snow',80:'Showers',81:'Mod. showers',82:'Heavy showers',95:'Thunderstorm',96:'T-storm + hail',99:'Severe storm'};
 function wic(c,n){return(n&&WN[c])||WI[c]||'🌡️'}
 
+let sunCache=null;
+
 async function fWx(){
   try{
-    const url=`https://api.open-meteo.com/v1/forecast?latitude=${C.lat}&longitude=${C.lon}&hourly=temperature_2m,weathercode,precipitation_probability,relative_humidity_2m,wind_speed_10m,apparent_temperature&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max&current_weather=true&timezone=Europe%2FLondon&forecast_days=7`;
-    const resp=await fetch(url);
-    if(!resp.ok)throw new Error('HTTP '+resp.status);
-    const d=await resp.json();
-    if(!d.current_weather)throw new Error('Bad data');
+    const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${C.lat}&longitude=${C.lon}&hourly=temperature_2m,weathercode,precipitation_probability,relative_humidity_2m,wind_speed_10m,apparent_temperature&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max&current_weather=true&timezone=Europe%2FLondon&forecast_days=7`);
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const d=await r.json();if(!d.current_weather)throw new Error('No data');
     wxCd=d.current_weather.weathercode;
-    renderWx(d);
-    rEnv({sunrise:d.daily.sunrise[0],sunset:d.daily.sunset[0],uv:d.daily.uv_index_max[0]});
+    sunCache={sr:d.daily.sunrise[0],ss:d.daily.sunset[0],uv:d.daily.uv_index_max[0]};
+    renderCenter(d);fillEnv();
   }catch(e){
-    console.error('Weather:',e);
-    document.getElementById('wxB').innerHTML=`<div class="err">Weather unavailable<br><span style="font-size:8px;opacity:.35">${e.message} · Retry 30s</span></div>`;
+    document.getElementById('centerB').innerHTML=`<div class="err">Weather unavailable · ${e.message}<br>Retry in 30s</div>`;
     setTimeout(fWx,30000);
   }
 }
-function renderWx(d){
-  const cw=d.current_weather,hr=lHour(),isN=hr>=20||hr<6,today=todayISO();
+
+function renderCenter(d){
+  const cw=d.current_weather,hr=lH(),isN=hr>=20||hr<6,today=todayISO();
   let ci=0;for(let i=0;i<d.hourly.time.length;i++){if(d.hourly.time[i].startsWith(today)&&parseInt(d.hourly.time[i].slice(11,13))>=hr){ci=i;break}}
-  const hrs=[];for(let i=ci;i<Math.min(ci+14,d.hourly.time.length);i++){const tH=parseInt(d.hourly.time[i].slice(11,13));hrs.push({t:pad(tH)+':00',v:Math.round(d.hourly.temperature_2m[i]),c:d.hourly.weathercode[i],p:d.hourly.precipitation_probability[i]||0,n:tH>=20||tH<6})}
-  const days=d.daily.time.slice(1,6).map((t,i)=>{const dt=new Date(t+'T12:00:00Z');return{nm:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][dt.getUTCDay()],c:d.daily.weathercode[i+1],hi:Math.round(d.daily.temperature_2m_max[i+1]),lo:Math.round(d.daily.temperature_2m_min[i+1])}});
   const hum=d.hourly.relative_humidity_2m[ci]??'--',wind=Math.round(cw.windspeed);
   const feel=d.hourly.apparent_temperature?Math.round(d.hourly.apparent_temperature[ci]):Math.round(cw.temperature);
-  // Rain alert
-  let rainTime=null;
-  for(let i=ci;i<d.hourly.time.length;i++){if(d.hourly.time[i].startsWith(today)&&RAIN.includes(d.hourly.weathercode[i])){rainTime=d.hourly.time[i].slice(11,16);break}}
-  const ra=document.getElementById('ra');
-  if(rainTime){ra.classList.add('on');document.getElementById('rw').textContent='at '+rainTime}else ra.classList.remove('on');
 
-  document.getElementById('wxB').innerHTML=`
+  // Hourly with sunrise/sunset injected
+  const srH=parseInt(d.daily.sunrise[0].slice(11,13)),srT=d.daily.sunrise[0].slice(11,16);
+  const ssH=parseInt(d.daily.sunset[0].slice(11,13)),ssT=d.daily.sunset[0].slice(11,16);
+  const items=[];
+  for(let i=ci;i<Math.min(ci+16,d.hourly.time.length);i++){
+    const tH=parseInt(d.hourly.time[i].slice(11,13)),isT=d.hourly.time[i].startsWith(today);
+    if(isT&&tH===srH+1&&hr<=srH)items.push({sun:true,lbl:'Sunrise',t:srT,ic:'🌅'});
+    items.push({t:pad(tH)+':00',v:Math.round(d.hourly.temperature_2m[i]),c:d.hourly.weathercode[i],p:d.hourly.precipitation_probability[i]||0,n:tH>=20||tH<6});
+    if(isT&&tH===ssH)items.push({sun:true,lbl:'Sunset',t:ssT,ic:'🌇'});
+  }
+
+  // Daily
+  const days=d.daily.time.slice(1,7).map((t,i)=>{const dt=new Date(t+'T12:00:00Z');return{nm:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][dt.getUTCDay()],c:d.daily.weathercode[i+1],hi:Math.round(d.daily.temperature_2m_max[i+1]),lo:Math.round(d.daily.temperature_2m_min[i+1])}});
+
+  // Rain check
+  let rt=null;for(let i=ci;i<d.hourly.time.length;i++){if(d.hourly.time[i].startsWith(today)&&RAIN.includes(d.hourly.weathercode[i])){rt=d.hourly.time[i].slice(11,16);break}}
+  const ra=document.getElementById('ra');if(rt){ra.classList.add('on');document.getElementById('rw').textContent='at '+rt}else ra.classList.remove('on');
+
+  document.getElementById('centerB').innerHTML=`
     <div class="wn"><span class="wi">${wic(cw.weathercode,isN)}</span><span class="wt">${Math.round(cw.temperature)}°C</span><div><div class="wds">${WT[cw.weathercode]||'Unknown'}</div><div class="wde"><span>💧 ${hum}%</span><span>💨 ${wind}km/h</span><span>🌡️ Feels ${feel}°</span></div></div></div>
-    <div class="hs">${hrs.map(h=>`<div class="hi${h.p>40?' rn':''}"><div class="ht">${h.t}</div><div class="hic">${wic(h.c,h.n)}</div><div class="hv">${h.v}°</div></div>`).join('')}</div>
+    <div class="hs">${items.map(h=>h.sun?
+      `<div class="hi sev"><div class="slbl">${h.lbl}</div><div class="hic">${h.ic}</div><div class="hv">${h.t}</div></div>`:
+      `<div class="hi${h.p>40?' rn':''}"><div class="ht">${h.t}</div><div class="hic">${wic(h.c,h.n)}</div><div class="hv">${h.v}°</div></div>`
+    ).join('')}</div>
     <div class="fr">${days.map(x=>`<div class="fd"><div class="fn">${x.nm}</div><div class="fi">${wic(x.c,false)}</div><div class="ft"><span class="fh">${x.hi}°</span> <span class="fl">${x.lo}°</span></div></div>`).join('')}</div>`;
 }
+
+function fillEnv(){
+  if(!sunCache)return;
+  const s=sunCache,srH=s.sr.slice(11,16),ssH=s.ss.slice(11,16);
+  const srMs=new Date(s.sr).getTime(),ssMs=new Date(s.ss).getTime();
+  const dm=(ssMs-srMs)/60000,dh=Math.floor(dm/60),dmi=Math.round(dm%60);
+  const prog=Math.max(0,Math.min(100,(Date.now()-srMs)/(ssMs-srMs)*100));
+  const sb=document.getElementById('sunBox');
+  if(sb)sb.innerHTML=`<div class="el">🌅 Sun</div><div class="sp-r"><div class="si"><span class="si-i">↑</span><span class="si-t">${srH}</span></div><div class="si"><span class="si-i">↓</span><span class="si-t">${ssH}</span></div></div><div class="dlb"><div class="dlf" style="width:${prog}%"></div></div><div class="es">${dh}h ${dmi}m daylight</div>`;
+
+  const uv=s.uv,uvP=Math.min(100,uv/11*100);
+  let uvL,uvA;if(uv<=2){uvL='Low';uvA='No protection needed'}else if(uv<=5){uvL='Moderate';uvA='Sunscreen recommended'}else if(uv<=7){uvL='High';uvA='Reduce exposure'}else if(uv<=10){uvL='Very High';uvA='Stay in shade'}else{uvL='Extreme';uvA='Avoid outdoors'}
+  const ub=document.getElementById('uvBox');
+  if(ub)ub.innerHTML=`<div class="el">🔆 UV</div><div class="ev">${uv.toFixed(1)} <span style="font-size:10px;font-weight:600;font-family:Inter">${uvL}</span></div><div class="uvb"><div class="uvm" style="left:${uvP}%"></div></div><div class="es">${uvA}</div>`;
+}
+
 fWx();setInterval(fWx,600000);
 
-// ══════════════════════════════
-//  TRAINS
-// ══════════════════════════════
+// ── Trains ──
 let trR=0;
 async function fTr(){
-  const el=document.getElementById('trB');
+  const el=document.getElementById('rightB');
   try{
-    const resp=await fetch(C.trApi+'/departures/'+C.trCrs+'/10?expand=true');
-    if(!resp.ok)throw new Error('HTTP '+resp.status);
-    const d=await resp.json();trR=0;
-    if(!d.trainServices||!d.trainServices.length){el.innerHTML='<div class="err">No departures right now</div>';return}
+    const r=await fetch(C.trApi+'/departures/'+C.trCrs+'/15?expand=true');
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const d=await r.json();trR=0;
+    if(!d.trainServices||!d.trainServices.length){el.innerHTML='<div class="err">No departures now</div>';return}
     const ldn=['Cannon Street','London Bridge','Blackfriars','Victoria','Kentish Town','St Pancras','Luton','Bedford','St Albans','Sevenoaks','Charing Cross','Waterloo East'];
     const trains=d.trainServices.filter(s=>{
       const dest=s.destination?s.destination[0].locationName:'';
       if(dest.includes('London')||ldn.some(l=>dest.includes(l)))return true;
-      if(s.subsequentCallingPoints&&s.subsequentCallingPoints[0]){const cps=s.subsequentCallingPoints[0].callingPoint;if(cps)return cps.some(cp=>cp.locationName&&(cp.locationName.includes('London Bridge')||cp.locationName.includes('Cannon Street')))}
-      return false;
-    }).slice(0,8);
+      if(s.subsequentCallingPoints&&s.subsequentCallingPoints[0]){const cp=s.subsequentCallingPoints[0].callingPoint;if(cp)return cp.some(c=>c.locationName&&(c.locationName.includes('London Bridge')||c.locationName.includes('Cannon Street')))}
+      return false
+    }).slice(0,12);
     if(!trains.length){el.innerHTML='<div class="err">No London-bound trains</div>';return}
-    const nH=lHour(),nM=lMin();
+    const nH=lH(),nM=lM();
     el.innerHTML=`<div class="tl">${trains.map(s=>{
-      const dest=s.destination?s.destination[0].locationName:'Unknown',std=s.std||'--:--',etd=s.etd||'',plat=s.platform||'-';
+      const dest=s.destination?s.destination[0].locationName:'?',std=s.std||'--:--',etd=s.etd||'',plat=s.platform||'-';
       const isCS=dest.includes('Cannon');
-      let callsLB=false;if(s.subsequentCallingPoints&&s.subsequentCallingPoints[0]&&s.subsequentCallingPoints[0].callingPoint)callsLB=s.subsequentCallingPoints[0].callingPoint.some(cp=>cp.locationName==='London Bridge');
-      const isLB=dest==='London Bridge'||(callsLB&&!isCS);
-      let via='';if(isCS&&callsLB)via='via LB';
+      let cLB=false;if(s.subsequentCallingPoints&&s.subsequentCallingPoints[0]&&s.subsequentCallingPoints[0].callingPoint)cLB=s.subsequentCallingPoints[0].callingPoint.some(c=>c.locationName==='London Bridge');
+      const isLB=dest==='London Bridge'||(cLB&&!isCS);
       let sc='ot',st='On time';if(etd==='Cancelled'){sc='cx';st='Cancelled'}else if(etd==='Delayed'){sc='dl';st='Delayed'}else if(etd&&etd!=='On time'){sc='dl';st=etd}
-      const p=std.split(':');let mins=(+p[0]*60+ +p[1])-(nH*60+nM);if(mins<0)mins=0;
-      return`<div class="ti${isCS?' cs':''}${isLB?' lb':''}"><span class="tm">${std}</span><span class="td">${dest}${via?` <span style="font-size:7px;opacity:.3">${via}</span>`:''}</span><span class="tn">${mins}m</span><span class="tp">P${plat}</span><span class="ts ${sc}">${st}</span></div>`;
+      const p=std.split(':');let mins=Math.max(0,(+p[0]*60+ +p[1])-(nH*60+nM));
+      return`<div class="ti${isCS?' cs':''}${isLB?' lb':''}"><span class="tm">${std}</span><span class="td">${dest}</span><span class="tn">${mins}m</span><span class="tp">P${plat}</span><span class="ts ${sc}">${st}</span></div>`
     }).join('')}</div><div class="tlg"><span><b style="color:#e2e8f0">Bold</b> Cannon St</span><span><span style="display:inline-block;width:3px;height:8px;background:#3b82f6;border-radius:1px"></span> London Br</span></div>`;
-  }catch(e){trR++;const w=Math.min(trR*30,300);el.innerHTML=`<div class="err">Trains unavailable<br><span style="font-size:8px;opacity:.3">${e.message} · Retry ${w}s</span></div>`;setTimeout(fTr,w*1000)}
+  }catch(e){trR++;const w=Math.min(trR*30,300);el.innerHTML=`<div class="err">Trains unavailable<br><span style="font-size:7px;opacity:.3">${e.message}</span><br><span style="font-size:7px;opacity:.2">Retry ${w}s</span></div>`;setTimeout(fTr,w*1000)}
 }
 fTr();setInterval(fTr,60000);
 
-// ══════════════════════════════
-//  SPOTIFY — PKCE
-// ══════════════════════════════
-let spT={access:null,refresh:null,exp:0},spPlayer=null,spState=null;
+// ── Spotify PKCE ──
+let spT={a:null,r:null,e:0},spP=null,spS=null;
 function rnd(n){const a=new Uint8Array(n);crypto.getRandomValues(a);return Array.from(a,b=>b.toString(16).padStart(2,'0')).join('')}
 async function sha(s){return await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s))}
 function b64u(b){return btoa(String.fromCharCode(...new Uint8Array(b))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
 window.spLogin=async function(){const v=rnd(64),ch=b64u(await sha(v));document.cookie='sp_v='+v+';max-age=600;path=/;SameSite=Lax';window.location.href='https://accounts.spotify.com/authorize?'+new URLSearchParams({client_id:C.spId,response_type:'code',redirect_uri:C.spRedirect,scope:C.spScopes,code_challenge_method:'S256',code_challenge:ch,state:rnd(16)})};
-async function spEx(code){const ck=document.cookie.split(';').map(c=>c.trim()).find(c=>c.startsWith('sp_v='));if(!ck)return false;try{const r=await fetch('https://accounts.spotify.com/api/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({client_id:C.spId,grant_type:'authorization_code',code,redirect_uri:C.spRedirect,code_verifier:ck.split('=')[1]})});const d=await r.json();if(d.access_token){spT={access:d.access_token,refresh:d.refresh_token,exp:Date.now()+d.expires_in*1000};document.cookie='sp_v=;max-age=0;path=/';return true}}catch(e){}return false}
-async function spRf(){if(!spT.refresh)return false;try{const r=await fetch('https://accounts.spotify.com/api/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({client_id:C.spId,grant_type:'refresh_token',refresh_token:spT.refresh})});const d=await r.json();if(d.access_token){spT.access=d.access_token;spT.exp=Date.now()+d.expires_in*1000;if(d.refresh_token)spT.refresh=d.refresh_token;return true}}catch(e){}return false}
-setInterval(async()=>{if(spT.access&&spT.exp-Date.now()<120000)await spRf()},60000);
-function initSpSDK(){const s=document.createElement('script');s.src='https://sdk.scdn.co/spotify-player.js';document.body.appendChild(s);window.onSpotifyWebPlaybackSDKReady=()=>{spPlayer=new Spotify.Player({name:'🏠 Home Dashboard',getOAuthToken:async cb=>{if(spT.exp-Date.now()<60000)await spRf();cb(spT.access)},volume:.5});spPlayer.addListener('ready',({device_id})=>console.log('Spotify ready:',device_id));spPlayer.addListener('player_state_changed',s=>{spState=s;rSp(s)});spPlayer.addListener('authentication_error',async()=>{if(!await spRf())rSpL()});spPlayer.addListener('initialization_error',({message})=>console.error('Spotify:',message));spPlayer.connect();rSp(null)}}
-function rSp(s){const el=document.getElementById('spB');if(!s||!s.track_window||!s.track_window.current_track){el.innerHTML=`<div class="sw"><div class="sc"><div class="sph">🎵</div></div><div class="sif"><div class="str" style="opacity:.35">Waiting for playback</div><div class="sar">Open Spotify → Select "🏠 Home Dashboard"</div></div></div>`;return}const t=s.track_window.current_track,img=t.album.images&&t.album.images[0]?t.album.images[0].url:'',p=s.duration?(s.position/s.duration*100):0;el.innerHTML=`<div class="sw"><div class="sc">${img?`<img src="${img}">`:`<div class="sph">🎵</div>`}</div><div class="sif"><div class="str">${t.name}</div><div class="sar">${t.artists.map(a=>a.name).join(', ')} — ${t.album.name}</div><div class="scr"><button class="sb" onclick="spPlayer.previousTrack()">⏮</button><button class="sb pp" onclick="spPlayer.togglePlay()">${s.paused?'▶':'⏸'}</button><button class="sb" onclick="spPlayer.nextTrack()">⏭</button></div><div class="spr"><div class="spf" style="width:${p}%"></div></div></div></div>`}
-function rSpL(){document.getElementById('spB').innerHTML=`<div class="sw"><div class="sc"><div class="sph">🎵</div></div><div class="sif"><div class="str" style="opacity:.4">Connect Spotify</div><div class="sar">Log in with your Premium account</div><span class="sli" onclick="spLogin()">Log in with Spotify</span></div></div>`}
-setInterval(()=>{if(spState&&!spState.paused){spState.position=Math.min(spState.position+1000,spState.duration);rSp(spState)}},1000);
-(async()=>{const p=new URLSearchParams(window.location.search),code=p.get('code');if(code){window.history.replaceState({},'',window.location.pathname);if(await spEx(code)){initSpSDK();return}}rSpL()})();
-setInterval(()=>{if(calOff===0)rCal()},60000);
+async function spEx(code){const ck=document.cookie.split(';').map(c=>c.trim()).find(c=>c.startsWith('sp_v='));if(!ck)return false;try{const r=await fetch('https://accounts.spotify.com/api/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({client_id:C.spId,grant_type:'authorization_code',code,redirect_uri:C.spRedirect,code_verifier:ck.split('=')[1]})});const d=await r.json();if(d.access_token){spT={a:d.access_token,r:d.refresh_token,e:Date.now()+d.expires_in*1000};document.cookie='sp_v=;max-age=0;path=/';return true}}catch(e){}return false}
+async function spRf(){if(!spT.r)return false;try{const r=await fetch('https://accounts.spotify.com/api/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({client_id:C.spId,grant_type:'refresh_token',refresh_token:spT.r})});const d=await r.json();if(d.access_token){spT.a=d.access_token;spT.e=Date.now()+d.expires_in*1000;if(d.refresh_token)spT.r=d.refresh_token;return true}}catch(e){}return false}
+setInterval(async()=>{if(spT.a&&spT.e-Date.now()<120000)await spRf()},60000);
+function initSp(){const s=document.createElement('script');s.src='https://sdk.scdn.co/spotify-player.js';document.body.appendChild(s);window.onSpotifyWebPlaybackSDKReady=()=>{spP=new Spotify.Player({name:'🏠 Home Dashboard',getOAuthToken:async cb=>{if(spT.e-Date.now()<60000)await spRf();cb(spT.a)},volume:.5});spP.addListener('ready',({device_id})=>console.log('Spotify:',device_id));spP.addListener('player_state_changed',s=>{spS=s;rSp(s)});spP.addListener('authentication_error',async()=>{if(!await spRf())rSpL()});spP.connect();rSp(null)}}
+function rSp(s){const el=document.getElementById('spB');if(!s||!s.track_window||!s.track_window.current_track){el.innerHTML=`<div class="sw"><div class="sc"><div class="sph">🎵</div></div><div class="sif"><div class="str" style="opacity:.3">Waiting for playback</div><div class="sar">Open Spotify → Select "🏠 Home Dashboard"</div></div></div>`;return}const t=s.track_window.current_track,img=t.album.images&&t.album.images[0]?t.album.images[0].url:'',p=s.duration?(s.position/s.duration*100):0;el.innerHTML=`<div class="sw"><div class="sc">${img?`<img src="${img}">`:`<div class="sph">🎵</div>`}</div><div class="sif"><div class="str">${t.name}</div><div class="sar">${t.artists.map(a=>a.name).join(', ')} — ${t.album.name}</div><div class="scr"><button class="sb" onclick="spP.previousTrack()">⏮</button><button class="sb pp" onclick="spP.togglePlay()">${s.paused?'▶':'⏸'}</button><button class="sb" onclick="spP.nextTrack()">⏭</button></div><div class="spr"><div class="spf" style="width:${p}%"></div></div></div></div>`}
+function rSpL(){document.getElementById('spB').innerHTML=`<div class="sw"><div class="sc"><div class="sph">🎵</div></div><div class="sif"><div class="str" style="opacity:.35">Connect Spotify</div><div class="sar">Premium required</div><span class="sli" onclick="spLogin()">Log in with Spotify</span></div></div>`}
+setInterval(()=>{if(spS&&!spS.paused){spS.position=Math.min(spS.position+1000,spS.duration);rSp(spS)}},1000);
+(async()=>{const p=new URLSearchParams(window.location.search),code=p.get('code');if(code){window.history.replaceState({},'',window.location.pathname);if(await spEx(code)){initSp();return}}rSpL()})();
+setInterval(()=>{if(calO===0){rLeft();if(sunCache)fillEnv()}},60000);
 </script>
 </body>
 </html>
