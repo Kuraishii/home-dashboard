@@ -2,8 +2,8 @@ name: Fetch Trains
 
 on:
   schedule:
-    - cron: '* * * * *'   # every minute
-  workflow_dispatch:        # allow manual trigger
+    - cron: '* * * * *'
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -18,15 +18,16 @@ jobs:
         env:
           TRAIN_TOKEN: ${{ secrets.TRAIN_TOKEN }}
         run: |
-          curl -s -X POST \
-            -H "Content-Type: text/xml;charset=UTF-8" \
-            -H "SOAPAction: http://thalesgroup.com/RTTI/2017-02-02/ldb/GetDepBoardWithDetails" \
-            --data "<?xml version='1.0' encoding='utf-8'?>
-          <soap:Envelope xmlns:soap='http://schemas.xmlsoap.org/soap/envelope/'
-            xmlns:typ='http://thalesgroup.com/RTTI/2013-11-28/Token/types'
-            xmlns:ldb='http://thalesgroup.com/RTTI/2017-02-02/ldb/'>
+          cat > request.xml << XMLEOF
+          <?xml version="1.0" encoding="utf-8"?>
+          <soap:Envelope
+            xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+            xmlns:typ="http://thalesgroup.com/RTTI/2013-11-28/Token/types"
+            xmlns:ldb="http://thalesgroup.com/RTTI/2017-02-02/ldb/">
             <soap:Header>
-              <typ:AccessToken><typ:TokenValue>${TRAIN_TOKEN}</typ:TokenValue></typ:AccessToken>
+              <typ:AccessToken>
+                <typ:TokenValue>${TRAIN_TOKEN}</typ:TokenValue>
+              </typ:AccessToken>
             </soap:Header>
             <soap:Body>
               <ldb:GetDepBoardWithDetailsRequest>
@@ -34,42 +35,49 @@ jobs:
                 <ldb:crs>DEP</ldb:crs>
               </ldb:GetDepBoardWithDetailsRequest>
             </soap:Body>
-          </soap:Envelope>" \
+          </soap:Envelope>
+          XMLEOF
+
+          curl -s -X POST \
+            -H "Content-Type: text/xml;charset=UTF-8" \
+            -H "SOAPAction: http://thalesgroup.com/RTTI/2017-02-02/ldb/GetDepBoardWithDetails" \
+            --data @request.xml \
             https://lite.realtime.nationalrail.co.uk/OpenLDBWS/ldb11.asmx > raw.xml
+
+          echo "=== RAW XML ==="
+          cat raw.xml
 
       - name: Convert XML to JSON
         run: |
           python3 - <<'EOF'
           import xml.etree.ElementTree as ET, json
-          from datetime import datetime
+          from datetime import datetime, timezone
 
           with open('raw.xml', 'r', encoding='utf-8') as f:
             raw = f.read()
 
-          # Print full XML so we can debug tag names
-          print("=== FULL XML ===")
-          print(raw)
-          print("=== END XML ===")
-
           root = ET.fromstring(raw)
 
-          # Print every unique tag in the document
-          all_tags = sorted(set(e.tag.split('}')[-1] for e in root.iter()))
-          print("ALL TAGS FOUND:", all_tags)
+          # Check for SOAP fault first
+          faults = [e for e in root.iter() if e.tag.split('}')[-1] == 'Fault']
+          if faults:
+            fs = [e for e in root.iter() if e.tag.split('}')[-1] == 'faultstring']
+            print("SOAP FAULT:", fs[0].text if fs else 'unknown')
+            json.dump({'updated': datetime.now(timezone.utc).strftime('%H:%M'), 'trains': [], 'error': fs[0].text if fs else 'SOAP fault'}, open('trains.json','w'))
+            exit(0)
 
-          def find_all_tag(el, local):
+          def find_all(el, local):
             return [e for e in el.iter() if e.tag.split('}')[-1] == local]
 
-          def find_one(el, *locals):
-            for local in locals:
-              results = find_all_tag(el, local)
-              if results and results[0].text:
-                return results[0].text.strip()
+          def find_one(el, *tags):
+            for tag in tags:
+              r = find_all(el, tag)
+              if r and r[0].text:
+                return r[0].text.strip()
             return ''
 
-          # Try both 'service' and 'trainServices' as container
-          services = find_all_tag(root, 'service')
-          print(f"Found {len(services)} service elements")
+          services = find_all(root, 'service')
+          print(f"Found {len(services)} services")
 
           trains = []
           for svc in services:
@@ -78,15 +86,12 @@ jobs:
             dest  = find_one(svc, 'locationName')
             plat  = find_one(svc, 'platform')
             op    = find_one(svc, 'operator')
-
-            # All locationName values inside callingPoint elements only
             cp_names = [
               e.text.strip()
-              for cp in find_all_tag(svc, 'callingPoint')
-              for e in find_all_tag(cp, 'locationName')
+              for cp in find_all(svc, 'callingPoint')
+              for e in find_all(cp, 'locationName')
               if e.text
             ]
-
             trains.append({
               'aimed': aimed,
               'expected': exp,
@@ -96,18 +101,17 @@ jobs:
               'callingPoints': cp_names,
               'cancelled': exp.lower() == 'cancelled'
             })
+            print(f"  {aimed} -> {dest} ({exp})")
 
           out = {
-            'updated': datetime.utcnow().strftime('%H:%M'),
+            'updated': datetime.now(timezone.utc).strftime('%H:%M'),
             'trains': trains[:10]
           }
 
           with open('trains.json', 'w') as f:
             json.dump(out, f)
 
-          print(f"Written {len(trains)} trains")
-          if trains:
-            print("First train:", json.dumps(trains[0], indent=2))
+          print(f"Done — written {len(trains)} trains")
           EOF
 
       - name: Commit trains.json
