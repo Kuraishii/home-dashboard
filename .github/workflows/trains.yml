@@ -2,7 +2,7 @@ name: Fetch Trains
 
 on:
   schedule:
-    - cron:  '*/15 * * * *'
+    - cron: '*/15 * * * *'
   workflow_dispatch:
 
 permissions:
@@ -95,16 +95,24 @@ jobs:
               for e in find_all(cp, 'locationName')
               if e.text
             ]
-            trains.append({
-              'aimed': aimed,
-              'expected': exp,
-              'destination': dest,
-              'platform': plat,
-              'operator': op,
-              'callingPoints': cp_names,
-              'cancelled': exp.lower() == 'cancelled'
-            })
-            print(f"  {aimed} -> {dest} ({exp})")
+              # Filter to London-direction trains only:
+            # Platform 1 = always London-bound at Deptford
+            # No platform = check if Cannon Street or London Bridge is destination or calling point
+            LONDON = ['Cannon Street', 'London Bridge']
+            is_london = any(l in dest for l in LONDON) or any(l in cp for cp in cp_names for l in LONDON)
+            if plat == '1' or (plat == '' and is_london):
+              trains.append({
+                'aimed': aimed,
+                'expected': exp,
+                'destination': dest,
+                'platform': plat,
+                'operator': op,
+                'callingPoints': cp_names,
+                'cancelled': exp.lower() == 'cancelled'
+              })
+              print(f"  ✓ {aimed} -> {dest} P{plat} ({exp})")
+            else:
+              print(f"  ✗ skip {aimed} -> {dest} P{plat}")
 
           out = {
             'updated': datetime.now(timezone.utc).strftime('%H:%M'),
