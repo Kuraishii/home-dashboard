@@ -20,31 +20,33 @@ jobs:
         run: |
           cat > request.xml << XMLEOF
           <?xml version="1.0" encoding="utf-8"?>
-          <soap:Envelope
-            xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
-            xmlns:typ="http://thalesgroup.com/RTTI/2013-11-28/Token/types"
-            xmlns:ldb="http://thalesgroup.com/RTTI/2017-02-02/ldb/">
-            <soap:Header>
-              <typ:AccessToken>
-                <typ:TokenValue>${TRAIN_TOKEN}</typ:TokenValue>
-              </typ:AccessToken>
-            </soap:Header>
-            <soap:Body>
-              <ldb:GetDepBoardWithDetailsRequest>
-                <ldb:numRows>10</ldb:numRows>
-                <ldb:crs>DEP</ldb:crs>
-              </ldb:GetDepBoardWithDetailsRequest>
-            </soap:Body>
-          </soap:Envelope>
+          <SOAP-ENV:Envelope
+            xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+            xmlns:ns1="http://thalesgroup.com/RTTI/2021-11-01/ldb/"
+            xmlns:ns2="http://thalesgroup.com/RTTI/2010-11-01/ldb/commontypes">
+            <SOAP-ENV:Header>
+              <ns2:AccessToken>
+                <ns2:TokenValue>${TRAIN_TOKEN}</ns2:TokenValue>
+              </ns2:AccessToken>
+            </SOAP-ENV:Header>
+            <SOAP-ENV:Body>
+              <ns1:GetDepBoardWithDetailsRequest>
+                <ns1:numRows>10</ns1:numRows>
+                <ns1:crs>DEP</ns1:crs>
+              </ns1:GetDepBoardWithDetailsRequest>
+            </SOAP-ENV:Body>
+          </SOAP-ENV:Envelope>
           XMLEOF
 
-          curl -s -X POST \
-            -H 'Content-Type: text/xml;charset=UTF-8' \
-            -H 'SOAPAction: http://thalesgroup.com/RTTI/2017-02-02/ldb/GetDepBoardWithDetails' \
-            --data @request.xml \
-            https://lite.realtime.nationalrail.co.uk/OpenLDBWS/ldb11.asmx > raw.xml
+          echo "=== REQUEST ==="
+          cat request.xml
 
-          echo "=== RAW XML ==="
+          curl -s -X POST \
+            -H "Content-Type: text/xml;charset=UTF-8" \
+            --data @request.xml \
+            https://lite.realtime.nationalrail.co.uk/OpenLDBWS/ldb12.asmx > raw.xml
+
+          echo "=== RESPONSE ==="
           cat raw.xml
 
       - name: Convert XML to JSON
@@ -58,14 +60,6 @@ jobs:
 
           root = ET.fromstring(raw)
 
-          # Check for SOAP fault first
-          faults = [e for e in root.iter() if e.tag.split('}')[-1] == 'Fault']
-          if faults:
-            fs = [e for e in root.iter() if e.tag.split('}')[-1] == 'faultstring']
-            print("SOAP FAULT:", fs[0].text if fs else 'unknown')
-            json.dump({'updated': datetime.now(timezone.utc).strftime('%H:%M'), 'trains': [], 'error': fs[0].text if fs else 'SOAP fault'}, open('trains.json','w'))
-            exit(0)
-
           def find_all(el, local):
             return [e for e in el.iter() if e.tag.split('}')[-1] == local]
 
@@ -75,6 +69,15 @@ jobs:
               if r and r[0].text:
                 return r[0].text.strip()
             return ''
+
+          # Check for SOAP fault
+          faults = find_all(root, 'Fault')
+          if faults:
+            fs = find_all(root, 'faultstring')
+            msg = fs[0].text if fs else 'unknown fault'
+            print("SOAP FAULT:", msg)
+            json.dump({'updated': datetime.now(timezone.utc).strftime('%H:%M'), 'trains': [], 'error': msg}, open('trains.json','w'))
+            exit(0)
 
           services = find_all(root, 'service')
           print(f"Found {len(services)} services")
@@ -107,10 +110,7 @@ jobs:
             'updated': datetime.now(timezone.utc).strftime('%H:%M'),
             'trains': trains[:10]
           }
-
-          with open('trains.json', 'w') as f:
-            json.dump(out, f)
-
+          json.dump(out, open('trains.json','w'))
           print(f"Done — written {len(trains)} trains")
           EOF
 
