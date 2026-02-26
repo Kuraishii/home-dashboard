@@ -345,12 +345,13 @@ async function fetchTrains(){
     }
     document.getElementById('train-upd').textContent = data.updated||'';
     document.getElementById('train-list').innerHTML = trains.slice(0,8).map(t=>{
-      const isCannon = t.destination.includes('Cannon')||t.callingPoints.some(n=>n.includes('Cannon'));
-      const isBridge = !isCannon&&(t.destination.includes('London Bridge')||t.callingPoints.some(n=>n.includes('London Bridge')));
+      const isCannon = t.destination.includes('Cannon') || t.callingPoints.some(n=>n.includes('Cannon'));
+      const isBridge = t.destination.includes('London Bridge') || t.callingPoints.some(n=>n.includes('London Bridge'));
+      const displayDest = isCannon ? 'London Cannon Street' : isBridge ? 'London Bridge' : t.destination;
+      const destCls = isCannon ? 'cannon' : isBridge ? 'bridge' : '';
+      const prefix  = isCannon ? '★ ' : isBridge ? '◆ ' : '';
       const statusCls = t.cancelled?'cancelled':t.expected!=='On time'&&t.expected!=='No report'&&t.expected!==t.aimed?'delayed':'on-time';
-      const destCls = isCannon?'cannon':isBridge?'bridge':'';
-      const prefix  = isCannon?'★ ':isBridge?'◆ ':'';
-      return `<div class="tr"><div class="tr-time">${t.aimed}</div><div class="tr-dest ${destCls}">${prefix}${t.destination}</div><div class="tr-plat">${t.platform?'P'+t.platform:''}</div><div class="tr-status ${statusCls}">${t.cancelled?'Cancelled':t.expected}</div></div>`;
+      return `<div class="tr"><div class="tr-time">${t.aimed}</div><div class="tr-dest ${destCls}">${prefix}${displayDest}</div><div class="tr-plat">${t.platform?'P'+t.platform:''}</div><div class="tr-status ${statusCls}">${t.cancelled?'Cancelled':t.expected}</div></div>`;
     }).join('');
   }catch(e){
     document.getElementById('train-list').innerHTML='<span style="color:#f87171;font-size:12px">⚠ Could not load trains</span>';
