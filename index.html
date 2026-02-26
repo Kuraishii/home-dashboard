@@ -333,14 +333,15 @@ document.getElementById('cal-next').addEventListener('click',()=>{calM++;if(calM
 
 // ── TRAINS ───────────────────────────────────────────────
 const LONDON = ['Cannon Street','London Bridge','Charing Cross','Blackfriars','Victoria','Waterloo','Fenchurch','St Pancras','Farringdon','City Thameslink'];
-const isLondon = s => LONDON.some(l => s.includes(l));
+const isLondonTerminus = s => LONDON.some(l => s.includes(l));
 
 async function fetchTrains(){
   try{
     const res = await fetch(TRAINS_JSON + '?t=' + Date.now());
     if(!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
-    const trains = (data.trains||[]).filter(t => isLondon(t.destination) || t.callingPoints.some(cp => isLondon(cp)));
+    // Only include if the DESTINATION is London, not just passing through
+    const trains = (data.trains||[]).filter(t => isLondonTerminus(t.destination));
     if(!trains.length){
       document.getElementById('train-list').innerHTML='<span style="color:var(--dim);font-size:12px">No London-bound departures</span>';
       return;
