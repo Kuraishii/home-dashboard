@@ -18,18 +18,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;co
 #bg{position:fixed;inset:0;z-index:0;transition:background 4s ease}
 #bg-overlay{position:fixed;inset:0;z-index:1;background:linear-gradient(160deg,rgba(0,0,0,0.15) 0%,rgba(0,0,0,0.45) 100%)}
 #app{position:relative;z-index:2;height:100vh;width:100vw;display:grid;grid-template-columns:1fr 300px;grid-template-rows:auto 1fr;gap:10px;padding:14px}
-
 .card{background:var(--glass);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid var(--glass-b);border-radius:var(--radius);padding:14px;overflow:hidden}
 .card-title{font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:var(--dim);margin-bottom:10px}
 
 /* TOP */
-#top{grid-column:1/-1;display:flex;align-items:center;gap:10px}
+#top{grid-column:1/-1;display:flex;align-items:center;gap:10px;position:relative}
 #weather-now{display:flex;align-items:center;gap:10px;min-width:190px}
 #wi-big{font-size:48px;line-height:1}
 #temp-now{font-size:34px;font-weight:300}
 #w-desc{font-size:12px;color:var(--dim);text-transform:capitalize}
 #w-meta{font-size:11px;color:var(--dim);margin-top:2px}
-#clock-block{flex:1;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center}
+#clock-block{position:absolute;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none}
 #clock{font-size:clamp(60px,8.5vw,96px);font-weight:200;letter-spacing:-2px;line-height:1;font-variant-numeric:tabular-nums}
 #date-line{font-size:14px;color:var(--dim);margin-top:2px}
 #sun-block{min-width:120px;text-align:right}
@@ -37,7 +36,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;co
 #feels{font-size:11px;color:var(--dim);margin-top:6px;text-align:right}
 #uv-inline{font-size:11px;color:var(--dim);margin-top:2px;text-align:right}
 
-/* LEFT — spotify gets flex:0, forecast fills remaining */
+/* LEFT */
 #left{display:flex;flex-direction:column;gap:10px;overflow:hidden;min-height:0}
 #hourly-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:5px}
 .hr{display:flex;flex-direction:column;align-items:center;gap:3px;background:var(--accent);border-radius:12px;padding:7px 4px;font-size:11px;min-width:0}
@@ -45,8 +44,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;co
 .hr-i{font-size:17px}
 .hr-tmp{font-weight:500}
 .hr-rain{font-size:9px;color:#7dd3fc}
-
-/* forecast fills remaining height, rows evenly spaced */
 #forecast-card{flex:1;display:flex;flex-direction:column;min-height:0}
 #fc-list{flex:1;display:flex;flex-direction:column;justify-content:space-between;min-height:0}
 .fc-r{display:flex;align-items:center;flex:1;border-bottom:1px solid var(--glass-b)}
@@ -59,12 +56,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;co
 .fc-fill{height:4px;border-radius:2px;background:linear-gradient(90deg,#7dd3fc,#fb923c);position:absolute}
 .fc-hi{width:26px;font-size:11px}
 
-/* Spotify — fixed height, bigger */
+/* SPOTIFY */
 #sp-card{flex:0 0 auto}
 .sw{display:flex;align-items:center;gap:10px}
 .sc{width:80px;height:80px;border-radius:12px;background:var(--accent);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:32px;overflow:hidden}
 .sc img{width:100%;height:100%;object-fit:cover;border-radius:12px}
-.sph{font-size:32px}
 .sif{flex:1;overflow:hidden}
 .str{font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sar{font-size:12px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px}
@@ -76,7 +72,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;co
 .spf{height:3px;background:#1db954;border-radius:2px;transition:width .5s linear}
 .sli{display:inline-block;margin-top:8px;background:#1db954;border:none;color:white;border-radius:8px;padding:6px 14px;font-size:12px;cursor:pointer;font-weight:600}
 
-/* RIGHT — trains gets more space, calendar less */
+/* RIGHT */
 #right{display:flex;flex-direction:column;gap:10px;overflow:hidden;min-height:0}
 #cal-card{flex:1;display:flex;flex-direction:column;min-height:0}
 #cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
@@ -85,7 +81,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;co
 .cal-nav:hover{opacity:1}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;flex:1}
 .cal-dow{font-size:9px;color:var(--dim);text-align:center;padding:1px 0}
-.cal-day{display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:6px;font-size:10px;gap:0px;padding:1px 0}
+.cal-day{display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:6px;font-size:10px;gap:0;padding:1px 0}
 .cal-day.today{background:rgba(255,255,255,0.22);font-weight:700}
 .cal-day.other{color:var(--dim);opacity:.35}
 .cal-day.bh{color:#fbbf24}
@@ -97,8 +93,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;co
 #moon-name{font-size:14px;font-weight:500}
 #moon-pct{font-size:11px;color:var(--dim);margin-top:2px}
 #moon-next{font-size:11px;color:var(--dim);margin-top:2px}
-
-/* Trains — bigger, flex:1.8 */
 #train-card{flex:1.8;display:flex;flex-direction:column;min-height:0}
 #train-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-shrink:0}
 #train-upd{font-size:9px;color:var(--dim)}
@@ -192,32 +186,44 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;co
   </div>
 
 </div>
-
 <script>
-const C={
-  lat:51.4779,lon:-0.0015,
-  trainToken:'a6d2c92a-e73b-4f27-8edc-53a8bca090d9',
-  spId:'a61a2fffda4f42bb8805650ff52bf415',
-  spRedirect:'https://kuraishii.github.io/home-dashboard/',
-  spScopes:'user-read-playback-state user-modify-playback-state streaming user-read-currently-playing'
+// ── CONFIG ───────────────────────────────────────────────
+const C = {
+  lat: 51.4779, lon: -0.0015,
+  spId: 'a61a2fffda4f42bb8805650ff52bf415',
+  spRedirect: 'https://kuraishii.github.io/home-dashboard/',
+  spScopes: 'user-read-playback-state user-modify-playback-state streaming user-read-currently-playing'
 };
-const DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
-const SDAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-const BH=new Set(['2025-01-01','2025-04-18','2025-04-21','2025-05-05','2025-05-26','2025-08-25','2025-12-25','2025-12-26','2026-01-01','2026-04-03','2026-04-06','2026-05-04','2026-05-25','2026-08-31','2026-12-25','2026-12-28']);
-function isBH(d){return BH.has(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`)}
+const TRAINS_JSON = 'https://kuraishii.github.io/home-dashboard/trains.json';
 
-// CLOCK
+const DAYS   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const SDAYS  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const BH = new Set(['2025-01-01','2025-04-18','2025-04-21','2025-05-05','2025-05-26','2025-08-25','2025-12-25','2025-12-26','2026-01-01','2026-04-03','2026-04-06','2026-05-04','2026-05-25','2026-08-31','2026-12-25','2026-12-28']);
+function isBH(d){return BH.has(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`);}
+
+// ── CLOCK ────────────────────────────────────────────────
 function tick(){
   const n=new Date();
   document.getElementById('clock').textContent=`${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`;
   document.getElementById('date-line').textContent=`${DAYS[n.getDay()]}, ${n.getDate()} ${MONTHS[n.getMonth()]} ${n.getFullYear()}`;
 }
-setInterval(tick,1000);tick();
+setInterval(tick,1000); tick();
 
-// BACKGROUND
-let _wid=800,_sr=null,_ss=null;
-const BG={clear_day:'linear-gradient(135deg,#1565c0 0%,#42a5f5 55%,#ffcc02 100%)',clear_dawn:'linear-gradient(135deg,#e91e63 0%,#ff9800 45%,#1565c0 100%)',clear_dusk:'linear-gradient(135deg,#bf360c 0%,#e65100 40%,#1a237e 100%)',clear_night:'linear-gradient(135deg,#0d0d1a 0%,#1a1a3e 55%,#283593 100%)',cloud_day:'linear-gradient(135deg,#455a64 0%,#78909c 55%,#b0bec5 100%)',cloud_night:'linear-gradient(135deg,#1c2331 0%,#2d3a4a 55%,#455a64 100%)',rain_day:'linear-gradient(135deg,#263238 0%,#37474f 40%,#546e7a 100%)',rain_night:'linear-gradient(135deg,#0a0e14 0%,#162029 55%,#263238 100%)',snow:'linear-gradient(135deg,#cfd8dc 0%,#b0bec5 50%,#90a4ae 100%)',thunder:'linear-gradient(135deg,#12001f 0%,#1a0030 55%,#0d1b2a 100%)'};
+// ── BACKGROUND ───────────────────────────────────────────
+let _wid=800, _sr=null, _ss=null;
+const BG={
+  clear_day:'linear-gradient(135deg,#1565c0 0%,#42a5f5 55%,#ffcc02 100%)',
+  clear_dawn:'linear-gradient(135deg,#e91e63 0%,#ff9800 45%,#1565c0 100%)',
+  clear_dusk:'linear-gradient(135deg,#bf360c 0%,#e65100 40%,#1a237e 100%)',
+  clear_night:'linear-gradient(135deg,#0d0d1a 0%,#1a1a3e 55%,#283593 100%)',
+  cloud_day:'linear-gradient(135deg,#455a64 0%,#78909c 55%,#b0bec5 100%)',
+  cloud_night:'linear-gradient(135deg,#1c2331 0%,#2d3a4a 55%,#455a64 100%)',
+  rain_day:'linear-gradient(135deg,#263238 0%,#37474f 40%,#546e7a 100%)',
+  rain_night:'linear-gradient(135deg,#0a0e14 0%,#162029 55%,#263238 100%)',
+  snow:'linear-gradient(135deg,#cfd8dc 0%,#b0bec5 50%,#90a4ae 100%)',
+  thunder:'linear-gradient(135deg,#12001f 0%,#1a0030 55%,#0d1b2a 100%)'
+};
 function pickBg(id,now,sr,ss){
   const h=now.getHours(),srH=sr?new Date(sr*1000).getHours():6,ssH=ss?new Date(ss*1000).getHours():20;
   const isDay=h>=srH&&h<ssH,isDawn=h>=srH-1&&h<srH+1,isDusk=h>=ssH-1&&h<ssH+1;
@@ -225,18 +231,23 @@ function pickBg(id,now,sr,ss){
   if(id>=300&&id<600)return isDay?BG.rain_day:BG.rain_night;
   if(id>=600&&id<700)return BG.snow;
   if(id>=801)return isDay?BG.cloud_day:BG.cloud_night;
-  if(isDawn)return BG.clear_dawn;if(isDusk)return BG.clear_dusk;
+  if(isDawn)return BG.clear_dawn;
+  if(isDusk)return BG.clear_dusk;
   return isDay?BG.clear_day:BG.clear_night;
 }
 function updateBg(){document.getElementById('bg').style.background=pickBg(_wid,new Date(),_sr,_ss);}
-setInterval(updateBg,60000);updateBg();
+setInterval(updateBg,60000); updateBg();
 
-// WEATHER HELPERS
-function wmoIcon(c,d=true){if(c===0)return d?'☀️':'🌙';if(c<=2)return d?'🌤️':'🌙';if(c===3)return'☁️';if(c<=49)return'🌫️';if(c<=59)return'🌦️';if(c<=69)return'🌧️';if(c<=79)return'❄️';if(c<=84)return'🌧️';if(c<=94)return'🌨️';return'⛈️';}
+// ── WEATHER HELPERS ──────────────────────────────────────
+function wmoIcon(c,d=true){
+  if(c===0)return d?'☀️':'🌙';if(c<=2)return d?'🌤️':'🌙';if(c===3)return'☁️';
+  if(c<=49)return'🌫️';if(c<=59)return'🌦️';if(c<=69)return'🌧️';
+  if(c<=79)return'❄️';if(c<=84)return'🌧️';if(c<=94)return'🌨️';return'⛈️';
+}
 function wmoDesc(c){const m={0:'Clear sky',1:'Mainly clear',2:'Partly cloudy',3:'Overcast',45:'Foggy',48:'Icy fog',51:'Light drizzle',53:'Drizzle',55:'Heavy drizzle',61:'Light rain',63:'Rain',65:'Heavy rain',71:'Light snow',73:'Snow',75:'Heavy snow',77:'Snow grains',80:'Showers',81:'Rain showers',82:'Violent showers',85:'Snow showers',86:'Heavy snow showers',95:'Thunderstorm',96:'Thunderstorm w/ hail',99:'Severe thunderstorm'};return m[c]||'Unknown';}
 function wmoToId(c){if(c===0)return 800;if(c<=2)return 801;if(c===3)return 804;if(c<=49)return 741;if(c<=59)return 300;if(c<=69)return 501;if(c<=79)return 601;if(c<=84)return 502;if(c<=94)return 621;return 211;}
 
-// OPEN-METEO
+// ── OPEN-METEO ───────────────────────────────────────────
 async function fetchWeather(){
   try{
     const url=`https://api.open-meteo.com/v1/forecast?latitude=${C.lat}&longitude=${C.lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,is_day&hourly=temperature_2m,weather_code,precipitation_probability&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max&timezone=Europe%2FLondon&forecast_days=8`;
@@ -255,13 +266,11 @@ async function fetchWeather(){
     document.getElementById('uv-inline').textContent=`UV ${uv} — ${uv<=2?'Low':uv<=5?'Moderate':uv<=7?'High':uv<=10?'Very High':'Extreme'}`;
     document.getElementById('sr').textContent=new Date(daily.sunrise[0]).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
     document.getElementById('ss').textContent=new Date(daily.sunset[0]).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-    // Hourly — 8 tiles
     const ni=Math.max(0,hourly.time.findIndex(t=>new Date(t)>new Date())-1);
     document.getElementById('hourly-grid').innerHTML=hourly.time.slice(ni,ni+8).map((t,i)=>{
       const idx=ni+i,hd=new Date(t),hDay=hd.getHours()>=6&&hd.getHours()<21,rain=hourly.precipitation_probability[idx]||0;
       return `<div class="hr"><div class="hr-t">${String(hd.getHours()).padStart(2,'0')}:00</div><div class="hr-i">${wmoIcon(hourly.weather_code[idx],hDay)}</div><div class="hr-tmp">${Math.round(hourly.temperature_2m[idx])}°</div><div class="hr-rain">${rain>0?rain+'%💧':'—'}</div></div>`;
     }).join('');
-    // 7-day forecast — evenly fills height
     const loT=Math.min(...daily.temperature_2m_min.slice(0,7)),hiT=Math.max(...daily.temperature_2m_max.slice(0,7)),rng=hiT-loT||1;
     document.getElementById('fc-list').innerHTML=daily.weather_code.slice(0,7).map((code,i)=>{
       const date=new Date(daily.sunrise[i]),dayName=i===0?'Today':SDAYS[date.getDay()];
@@ -271,9 +280,9 @@ async function fetchWeather(){
     }).join('');
   }catch(e){console.error('Weather',e);}
 }
-fetchWeather();setInterval(fetchWeather,10*60*1000);
+fetchWeather(); setInterval(fetchWeather,10*60*1000);
 
-// MOON
+// ── MOON ─────────────────────────────────────────────────
 function moonPhase(date=new Date()){
   const L=29.53058867,known=new Date('2000-01-06T18:14:00Z');
   const age=((((date-known)/(864e5))%L)+L)%L;
@@ -284,11 +293,17 @@ function moonPhase(date=new Date()){
   const na=nk.find(a=>a>age)??(L+nk[0]);
   return{name:ph.n,emoji:ph.e,pct,age:Math.round(age),daysLeft:Math.round(na>age?na-age:L-age+nk[0]),nextName:nn[nk.indexOf(na)]??'New Moon'};
 }
-function renderMoon(){const m=moonPhase();document.getElementById('moon-vis').textContent=m.emoji;document.getElementById('moon-name').textContent=m.name;document.getElementById('moon-pct').textContent=`Illumination ${m.pct}% · Day ${m.age}`;document.getElementById('moon-next').textContent=`Next: ${m.nextName} in ${m.daysLeft}d`;}
-renderMoon();setInterval(renderMoon,3600000);
+function renderMoon(){
+  const m=moonPhase();
+  document.getElementById('moon-vis').textContent=m.emoji;
+  document.getElementById('moon-name').textContent=m.name;
+  document.getElementById('moon-pct').textContent=`Illumination ${m.pct}% · Day ${m.age}`;
+  document.getElementById('moon-next').textContent=`Next: ${m.nextName} in ${m.daysLeft}d`;
+}
+renderMoon(); setInterval(renderMoon,3600000);
 
-// CALENDAR
-let calY=new Date().getFullYear(),calM=new Date().getMonth();
+// ── CALENDAR ─────────────────────────────────────────────
+let calY=new Date().getFullYear(), calM=new Date().getMonth();
 function moonEventsInMonth(y,m){
   const L=29.53058867,known=new Date('2000-01-06T18:14:00Z'),days=new Date(y,m+1,0).getDate(),ev={};
   for(let d=1;d<=days;d++){
@@ -316,62 +331,42 @@ renderCal();
 document.getElementById('cal-prev').addEventListener('click',()=>{calM--;if(calM<0){calM=11;calY--;}renderCal();});
 document.getElementById('cal-next').addEventListener('click',()=>{calM++;if(calM>11){calM=0;calY++;}renderCal();});
 
-// TRAINS — reads from trains.json generated by GitHub Actions
-const TRAINS_JSON = 'https://kuraishii.github.io/home-dashboard/trains.json';
-
-async function tryTrainFetch(){
-  if(!WORKER_URL){return '__no_worker__';}
-  try{
-    const res=await fetch(WORKER_URL,{
-      method:'POST',
-      headers:{'Content-Type':'text/xml;charset=UTF-8'},
-      body:TRAIN_SOAP,
-      signal:AbortSignal.timeout(8000)
-    });
-    if(!res.ok)return null;
-    const txt=await res.text();
-    return txt.includes('GetStationBoardResult')?txt:null;
-  }catch(e){console.error('Train fetch failed:',e.message);return null;}
-}
-
-function parseAndRenderTrains(txt){
-  const doc=new DOMParser().parseFromString(txt,'text/xml');
-  const svcs=doc.querySelectorAll('trainServices service');
-  if(!svcs.length){document.getElementById('train-list').innerHTML='<span style="color:var(--dim);font-size:12px">No departures</span>';return;}
-  const rows=[...svcs].slice(0,8).map(svc=>{
-    const g=tag=>svc.getElementsByTagNameNS('*',tag)[0]?.textContent.trim()||'';
-    const aimed=g('std')||'--:--',exp=g('etd')||'On time',dest=g('locationName'),plat=g('platform');
-    const cps=[...svc.querySelectorAll('callingPointList callingPoint')].map(cp=>cp.getElementsByTagNameNS('*','locationName')[0]?.textContent||'');
-    const isCannon=dest.includes('Cannon')||cps.some(n=>n.includes('Cannon'));
-    const isBridge=!isCannon&&(dest.includes('London Bridge')||cps.some(n=>n.includes('London Bridge')));
-    const cancelled=exp.toLowerCase()==='cancelled';
-    const statusCls=cancelled?'cancelled':exp!=='On time'&&exp!=='No report'&&exp!==aimed?'delayed':'on-time';
-    const destCls=isCannon?'cannon':isBridge?'bridge':'';
-    const prefix=isCannon?'★ ':isBridge?'◆ ':'';
-    return `<div class="tr"><div class="tr-time">${aimed}</div><div class="tr-dest ${destCls}">${prefix}${dest}</div><div class="tr-plat">${plat?'P'+plat:''}</div><div class="tr-status ${statusCls}">${cancelled?'Cancelled':exp}</div></div>`;
-  }).join('');
-  document.getElementById('train-list').innerHTML=rows;
-  document.getElementById('train-upd').textContent=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-}
+// ── TRAINS ───────────────────────────────────────────────
+const LONDON = ['Cannon Street','London Bridge','Charing Cross','Blackfriars','Victoria','Waterloo','Fenchurch','St Pancras','Farringdon','City Thameslink'];
+const isLondon = s => LONDON.some(l => s.includes(l));
 
 async function fetchTrains(){
-  document.getElementById('train-list').innerHTML='<span style="color:var(--dim);font-size:12px">Loading…</span>';
-  const txt=await tryTrainFetch();
-  if(txt==='__no_worker__'){
-    document.getElementById('train-list').innerHTML='<span style="color:#fbbf24;font-size:11px">⚠ Needs Cloudflare Worker — see setup instructions</span>';
-  } else if(txt){
-    parseAndRenderTrains(txt);
-  } else {
-    document.getElementById('train-list').innerHTML='<span style="color:#f87171;font-size:12px">⚠ Could not reach train API</span>';
+  try{
+    const res = await fetch(TRAINS_JSON + '?t=' + Date.now());
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    const trains = (data.trains||[]).filter(t => isLondon(t.destination) || t.callingPoints.some(cp => isLondon(cp)));
+    if(!trains.length){
+      document.getElementById('train-list').innerHTML='<span style="color:var(--dim);font-size:12px">No London-bound departures</span>';
+      return;
+    }
+    document.getElementById('train-upd').textContent = data.updated||'';
+    document.getElementById('train-list').innerHTML = trains.slice(0,8).map(t=>{
+      const isCannon = t.destination.includes('Cannon')||t.callingPoints.some(n=>n.includes('Cannon'));
+      const isBridge = !isCannon&&(t.destination.includes('London Bridge')||t.callingPoints.some(n=>n.includes('London Bridge')));
+      const statusCls = t.cancelled?'cancelled':t.expected!=='On time'&&t.expected!=='No report'&&t.expected!==t.aimed?'delayed':'on-time';
+      const destCls = isCannon?'cannon':isBridge?'bridge':'';
+      const prefix  = isCannon?'★ ':isBridge?'◆ ':'';
+      return `<div class="tr"><div class="tr-time">${t.aimed}</div><div class="tr-dest ${destCls}">${prefix}${t.destination}</div><div class="tr-plat">${t.platform?'P'+t.platform:''}</div><div class="tr-status ${statusCls}">${t.cancelled?'Cancelled':t.expected}</div></div>`;
+    }).join('');
+  }catch(e){
+    document.getElementById('train-list').innerHTML='<span style="color:#f87171;font-size:12px">⚠ Could not load trains</span>';
+    console.error('Trains',e);
   }
 }
-fetchTrains();setInterval(fetchTrains,60000);
+fetchTrains(); setInterval(fetchTrains,60000);
 
-// SPOTIFY (Web Playback SDK + PKCE)
-let spT={a:null,r:null,e:0},spP=null,spS=null;
-function rnd(n){const a=new Uint8Array(n);crypto.getRandomValues(a);return Array.from(a,b=>b.toString(16).padStart(2,'0')).join('')}
-async function sha(s){return await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s))}
-function b64u(b){return btoa(String.fromCharCode(...new Uint8Array(b))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+// ── SPOTIFY (Web Playback SDK + PKCE) ────────────────────
+let spT={a:null,r:null,e:0}, spP=null, spS=null;
+
+function rnd(n){const a=new Uint8Array(n);crypto.getRandomValues(a);return Array.from(a,b=>b.toString(16).padStart(2,'0')).join('');}
+async function sha(s){return await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));}
+function b64u(b){return btoa(String.fromCharCode(...new Uint8Array(b))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
 
 window.spLogin=async function(){
   const v=rnd(64),ch=b64u(await sha(v));
@@ -399,7 +394,7 @@ async function spRf(){
 }
 function saveSp(){if(spT.a){localStorage.setItem('sp_a',spT.a);localStorage.setItem('sp_r',spT.r||'');localStorage.setItem('sp_e',spT.e);}}
 function loadSp(){const a=localStorage.getItem('sp_a'),r=localStorage.getItem('sp_r'),e=localStorage.getItem('sp_e');if(a&&e&&Date.now()<Number(e)){spT={a,r,e:Number(e)};return true;}return false;}
-setInterval(async()=>{if(spT.a&&spT.e-Date.now()<120000){await spRf();}},60000);
+setInterval(async()=>{if(spT.a&&spT.e-Date.now()<120000)await spRf();},60000);
 
 function initSpSDK(){
   const s=document.createElement('script');s.src='https://sdk.scdn.co/spotify-player.js';document.body.appendChild(s);
@@ -408,29 +403,27 @@ function initSpSDK(){
     spP.addListener('ready',({device_id})=>console.log('Spotify ready',device_id));
     spP.addListener('player_state_changed',s=>{spS=s;rSp(s);});
     spP.addListener('authentication_error',async()=>{if(!await spRf())rSpL();});
-    spP.connect();rSp(null);
+    spP.connect(); rSp(null);
   };
 }
 function rSp(s){
   const el=document.getElementById('spB');
   if(!s||!s.track_window?.current_track){
-    el.innerHTML=`<div class="sw"><div class="sc"><div class="sph">🎵</div></div><div class="sif"><div class="str" style="opacity:.3">Waiting for playback</div><div class="sar" style="margin-top:4px">Open Spotify → select "🏠 Home Dashboard"</div></div></div>`;
+    el.innerHTML=`<div class="sw"><div class="sc">♪</div><div class="sif"><div class="str" style="opacity:.3">Waiting for playback</div><div class="sar" style="margin-top:4px">Open Spotify → select "🏠 Home Dashboard"</div></div></div>`;
     return;
   }
   const t=s.track_window.current_track,img=t.album.images?.[0]?.url||'',p=s.duration?(s.position/s.duration*100):0;
-  el.innerHTML=`<div class="sw"><div class="sc">${img?`<img src="${img}">`:'<div class="sph">🎵</div>'}</div><div class="sif"><div class="str">${t.name}</div><div class="sar">${t.artists.map(a=>a.name).join(', ')} — ${t.album.name}</div><div class="scr"><button class="sb" onclick="spP.previousTrack()">⏮</button><button class="sb pp" onclick="spP.togglePlay()">${s.paused?'▶':'⏸'}</button><button class="sb" onclick="spP.nextTrack()">⏭</button></div></div></div><div class="spr"><div class="spf" style="width:${p.toFixed(1)}%"></div></div>`;
+  el.innerHTML=`<div class="sw"><div class="sc">${img?`<img src="${img}">`:'♪'}</div><div class="sif"><div class="str">${t.name}</div><div class="sar">${t.artists.map(a=>a.name).join(', ')} — ${t.album.name}</div><div class="scr"><button class="sb" onclick="spP.previousTrack()">⏮</button><button class="sb pp" onclick="spP.togglePlay()">${s.paused?'▶':'⏸'}</button><button class="sb" onclick="spP.nextTrack()">⏭</button></div></div></div><div class="spr"><div class="spf" style="width:${p.toFixed(1)}%"></div></div>`;
 }
-function rSpL(){document.getElementById('spB').innerHTML=`<div class="sw"><div class="sc"><div class="sph">🎵</div></div><div class="sif"><div class="str" style="opacity:.35">Connect Spotify</div><div class="sar">Premium required</div><span class="sli" onclick="spLogin()">Log in with Spotify</span></div></div>`;}
-
-// Progress bar tick
+function rSpL(){
+  document.getElementById('spB').innerHTML=`<div class="sw"><div class="sc">♪</div><div class="sif"><div class="str" style="opacity:.35">Connect Spotify</div><div class="sar">Premium required</div><span class="sli" onclick="spLogin()">Log in with Spotify</span></div></div>`;
+}
 setInterval(()=>{
   if(spS&&!spS.paused){
     spS.position=Math.min(spS.position+1000,spS.duration);
     const el=document.querySelector('.spf');if(el)el.style.width=`${(spS.position/spS.duration*100).toFixed(1)}%`;
   }
 },1000);
-
-// Init
 (async()=>{
   const p=new URLSearchParams(window.location.search),code=p.get('code');
   if(code){window.history.replaceState({},'',window.location.pathname);if(await spEx(code)){initSpSDK();return;}}
