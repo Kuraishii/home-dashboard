@@ -1,1 +1,1 @@
-{"updated": "00:01", "trains": []}
+{"updated": "03:25", "trains": [{"aimed": "05:15", "expected": "On time", "destination": "London Bridge", "platform": "", "operator": "Southeastern", "callingPoints": ["Greenwich", "Maze Hill", "Westcombe Park", "Charlton", "Woolwich Dockyard", "Woolwich Arsenal", "Plumstead", "Abbey Wood", "Belvedere", "Erith", "Slade Green", "Dartford"], "cancelled": false}]}
